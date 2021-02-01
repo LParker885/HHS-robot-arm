@@ -7,6 +7,6 @@ fast = 0
 moveEnabled = 0
 
 while 1:
-  arduino.write(f"a{joints[0]}a{joints[1]}a{joints[2]}a{joints[3]}a{joints[4]}a{moveEnabled}a{fast}a")
-  while ack != "A":
+  arduino.write(f"a{joints[0]}a{joints[1]}a{joints[2]}a{joints[3]}a{joints[4]}a{moveEnabled}a{fast}a")  #this line is the important one, it actually sends the data to the arduino
+  while ack != "A":                                            #don't overload the arduino, wait untill it has sent the ack character to continue
     ack = arduino.readline().decode('utf-8').rstrip()
