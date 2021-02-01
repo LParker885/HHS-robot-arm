@@ -6,6 +6,10 @@ const double Pk[] = {0.5, 0.5, 0.5, 0.5, 0.5};
 const double Ik[] = {0, 0, 0, 0, 0};
 const double Dk[] = {0, 0, 0, 0, 0};
 
+const double Pkf[] = {5, 5, 5, 5, 5};
+const double Ikf[] = {0.1, 0.1, 0.1, 0.1, 0.1};
+const double Dkf[] = {0.2, 0.2, 0.2, 0.2, 0.2};
+
 //PID input/output variable arrays
 double Setpoint[5];
 double Input[5];
@@ -32,7 +36,7 @@ volatile int pot[] = {0, 0, 0, 0, 0};
 
 //serial input and positioning variables
 float val = 0;
-float pos[] = {90, 90, 90, 90, 90, 90, 90, 90, 90, 0};
+float pos[] = {90, 90, 90, 90, 90, 90, 90, 90, 90, 0, 0};
 int num = 0;
 
 //arrays for pin values
@@ -51,6 +55,7 @@ void setup() {
     PidP[i]->SetMode(AUTOMATIC);
     PidP[i]->SetOutputLimits(-255, 255); //set the output limits to -255 to 255 for arduino's analogWrite, with a negative for direction
     PidP[i]->SetSampleTime(20);
+
   }
 
   for (byte i = 0; i < 4; i++) { //iterate through the servo objects to attach them to their proper pins
@@ -64,8 +69,14 @@ void setup() {
 
 void loop() {
 
-  if (pos[9] == 1) {                //check that the motor-enable value has been set to 1, it's default is 0.
+  if (pos[8] == 1) {                //check that the motor-enable value has been set to 1, it's default is 0.
     for (byte i = 0; i < 5; i++) {   //iterate through each joint
+
+      if (pos[9] == 1) {
+        PidP[i]->SetTunings(Pkf[i], Ikf[i], Dkf[i]);
+      } else {
+        PidP[i]->SetTunings(Pk[i], Ik[i], Dk[i]);
+      }
 
       pot[i] = analogRead(pinPOT[i]);               //get the inputs for the PID controller and run Compute() to put the output in Output[]
       Setpoint[i] = map(pos[i], 0, 180, -255, 255);
@@ -86,16 +97,16 @@ void loop() {
 
   }
   for (byte i = 5; i < 9; i++) {  //iterate through the servo objects and set them to the specified positions
-    servoP[i-5]->write(pos[i]); // uses the -> operater instead of the . operater because servoP is a pointer, not the actual object
+    servoP[i - 5]->write(pos[i]); // uses the -> operater instead of the . operater because servoP is a pointer, not the actual object
   }
 }
 
 
 //handler for serial input
 void serialEvent() {
-  if (Serial.available() > 2) {  //makes sure that all the data is read if multiple sends happen
-    num = Serial.parseInt();  //data coming in loks like this: "a6a180.5a", with the charactors being neccesary for clean separation
-    val = Serial.parseFloat();
-    pos[num] = val; //put it into the input array
+  if (Serial.available()) {  //makes sure that all the data is read if multiple sends happen
+    for ( i = 0; i < 9; i++;) {
+      pos[i] = Serial.parseFloat();  //data coming in loks like this: "a90.3a180.5a49.7 etc.", with the charactors being neccesary for clean separation
+    }
   }
 }
