@@ -108,5 +108,6 @@ void serialEvent() {
     for ( i = 0; i < 9; i++;) {
       pos[i] = Serial.parseFloat();  //data coming in loks like this: "a90.3a180.5a49.7 etc.", with the charactors being neccesary for clean separation
     }
+    Serial.println("A");
   }
 }
