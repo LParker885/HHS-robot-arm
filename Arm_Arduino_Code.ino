@@ -77,18 +77,22 @@ void loop() {
       } else {
         PidP[i]->SetTunings(Pk[i], Ik[i], Dk[i]);
       }
-
+      
       pot[i] = analogRead(pinPOT[i]);               //get the inputs for the PID controller and run Compute() to put the output in Output[]
       Setpoint[i] = map(pos[i], 0, 180, -255, 255);
       Input[i] = map(pot[i], 0, 1023, -255, 255);
       PidP[i]->Compute(); // uses the -> operater instead of the . operater because PidP is a pointer, not the actual object
-
+      
       if (Output[i] > 0) {                    //these if statements account for forward and reverse without a second variable
         analogWrite(pinPWM[i], Output[i]);
         digitalWrite(pinDIR[i], LOW);
       }
       else if (Output[i] < 0) {
-        analogWrite(pinPWM[i], 255 - (abs(Output[i])));   //flip-flop the pwm signal, because the direction is now HIGH and the difference should still be the same.
+        if(i != 0){
+        analogWrite(pinPWM[i], 255 - (abs(Output[i])));   //flip-flop the pwm signal, because the direction is now HIGH and the difference should still be the same
+        } else{
+        analogWrite(pinPWM[i], Output[i]); //because the turret motor is run off of a different motor driver chip that does not need flippy-floppy PWM
+        }
         digitalWrite(pinDIR[i], HIGH);
       }
     }
