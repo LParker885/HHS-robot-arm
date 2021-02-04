@@ -89,7 +89,7 @@ void loop() {
          digitalWrite(pinDIR[i], LOW);
        }
        else if (Output[i] < 0) {
-         if(i != 0){
+         if(i != 0 && i != 1){
           analogWrite(pinPWM[i], 255 - (abs(Output[i])));   //flip-flop the pwm signal, because the direction is now HIGH and the difference should still be the same
          } else{
            analogWrite(pinPWM[i], Output[i]); //because the turret motor is run off of a different motor driver chip that does not need flippy-floppy PWM
