@@ -35,7 +35,7 @@ volatile int pot[] = {0, 0, 0, 0, 0};
 
 //serial input and positioning variables
 float val = 0;
-float pos[] = {90, 90, 90, 90, 90, 90, 90, 90, 0, 0};
+float pos[] = {90, 90, 90, 90, 90, 90, 90, 90, 0, 0}; // joint1, joint2, joint3, joint4, joint5, hand1, hand2, hand3, enable move, fast mode
 int num = 0;
 
 //arrays for pin values
