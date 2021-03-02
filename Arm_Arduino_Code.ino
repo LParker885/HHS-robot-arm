@@ -30,7 +30,7 @@ Servo hand3;
 Servo *servoP[] = {&hand1, &hand2, &hand3}; //pointer array to allow each of these to be iterated through in a for loop
 
 //array to hold analog readings
-volatile int pot[] = {0, 0, 0, 0, 0};
+int pot[] = {0, 0, 0, 0, 0};
 
 
 //serial input and positioning variables
@@ -102,7 +102,7 @@ void loop() {
     }
     
   }else{
-    digitalWrite(pinEstop,LOW)
+    digitalWrite(pinEstop,LOW);
   }
 }
 
