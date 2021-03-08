@@ -1,6 +1,8 @@
 #include <PID_v1.h>  //PID loop from http://playground.arduino.cc/Code/PIDLibrary
 #include <Servo.h>
 
+
+
 //PID tuning variables (in arrays of course for iteration)
 const double Pk[] = {0.5, 0.5, 0.5, 0.5, 0.5};
 const double Ik[] = {0, 0, 0, 0, 0};
@@ -45,8 +47,8 @@ const byte pinHAND[] = {14, 15, 16}; //pins the hand servo channels are attached
 const byte pinEstop = 17;
 
 void setup() {
-  pinMode(pinEstop,OUTPUT);
-  
+  pinMode(pinEstop, OUTPUT);
+
   for (byte i = 0; i < 5; i++) { //iterate through the PID controllers to set them up
     pinMode(pinPOT[i], INPUT); //set the pins for each motor controller and feedback pot to inputs/outputs
     pinMode(pinPWM[i], OUTPUT);
@@ -69,51 +71,56 @@ void setup() {
 void loop() {
 
   while (pos[8] == 1) { //check that the motor-enable value has been set to 1, it's default is 0.
-    digitalWrite(pinEstop,HIGH);
-     for (byte i = 0; i < 5; i++) {   //iterate through each joint
-  
-       if (pos[9] == 1) {
-         PidP[i]->SetTunings(Pkf[i], Ikf[i], Dkf[i]);
-       } else {
-         PidP[i]->SetTunings(Pk[i], Ik[i], Dk[i]);
-       }
-       
-       pot[i] = analogRead(pinPOT[i]);               //get the inputs for the PID controller and run Compute() to put the output in Output[]
-       
-       Setpoint[i] = map(pos[i], 0, 180, -255, 255);
-       Input[i] = map(pot[i], 0, 1023, -255, 255);
-        PidP[i]->Compute(); // uses the -> operater instead of the . operater because PidP is a pointer, not the actual object
-        
-        if (Output[i] > 0) {                    //these if statements account for forward and reverse without a second variable
-          analogWrite(pinPWM[i], Output[i]);
-         digitalWrite(pinDIR[i], LOW);
-       }
-       else if (Output[i] < 0) {
-         if(i != 0 && i != 1){
+  getSerial();
+    digitalWrite(pinEstop, HIGH);
+    for (byte i = 0; i < 5; i++) {   //iterate through each joint
+
+      if (pos[9] == 1) {
+        PidP[i]->SetTunings(Pkf[i], Ikf[i], Dkf[i]);
+      } else {
+        PidP[i]->SetTunings(Pk[i], Ik[i], Dk[i]);
+      }
+
+      pot[i] = analogRead(pinPOT[i]);               //get the inputs for the PID controller and run Compute() to put the output in Output[]
+
+      Setpoint[i] = map(pos[i], 0, 180, -255, 255);
+      Input[i] = map(pot[i], 0, 1023, -255, 255);
+      PidP[i]->Compute(); // uses the -> operater instead of the . operater because PidP is a pointer, not the actual object
+
+      if (Output[i] > 0) {                    //these if statements account for forward and reverse without a second variable
+        analogWrite(pinPWM[i], Output[i]);
+        digitalWrite(pinDIR[i], LOW);
+      }
+      else if (Output[i] < 0) {
+        if (i != 0 && i != 1) {
           analogWrite(pinPWM[i], 255 - (abs(Output[i])));   //flip-flop the pwm signal, because the direction is now HIGH and the difference should still be the same
-         digitalWrite(pinDIR[i], HIGH);
-         } else{
-           analogWrite(pinPWM[i], abs(Output[i])); //because the turret motor is run off of a different motor driver chip that does not need flippy-floppy PWM
-           digitalWrite(pinDIR[i], HIGH);
-         }
+          digitalWrite(pinDIR[i], HIGH);
+        } else {
+          analogWrite(pinPWM[i], abs(Output[i])); //because the turret motor is run off of a different motor driver chip that does not need flippy-floppy PWM
+          digitalWrite(pinDIR[i], HIGH);
+        }
       }
     }
     for (byte i = 5; i < 8; i++) {  //iterate through the servo objects and set them to the specified positions
       servoP[i - 5]->write(pos[i]); // uses the -> operater instead of the . operater because servoP is a pointer, not the actual object
     }
-    
+
   }
-    digitalWrite(pinEstop,LOW);
+  digitalWrite(pinEstop, LOW);
+  getSerial();
 }
 
 
 
 //handler for serial input
-void serialEvent() {
-  if (Serial.available()) {  //makes sure that all the data is read if multiple sends happen
-    for (int i = 0; i < 10; i++) {
-      pos[i] = Serial.parseFloat();  //data coming in loks like this: "a90.3a180.5a49.7 etc.", with the charactors being neccesary for clean separation
-    }
+void getSerial() {
+  if (Serial.available() > 0) {
+    int p = Serial.parseInt();
     Serial.println("A");
+    //while(!Serial.available()){Serial.println("A");}
+    float v = Serial.parseFloat();
+    Serial.println("A");
+    pos[p] = v;
+    
   }
 }
