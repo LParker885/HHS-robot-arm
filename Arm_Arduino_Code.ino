@@ -6,9 +6,9 @@ const double Pk[] = {0.5, 0.5, 0.5, 0.5, 0.5};
 const double Ik[] = {0, 0, 0, 0, 0};
 const double Dk[] = {0, 0, 0, 0, 0};
 
-const double Pkf[] = {5, 5, 5, 5, 5};
-const double Ikf[] = {0.1, 0.1, 0.1, 0.1, 0.1};
-const double Dkf[] = {0.2, 0.2, 0.2, 0.2, 0.2};
+const double Pkf[] = {2, 2, 2, 2, 2};
+const double Ikf[] = {0.01, 0.01, 0.01, 0.01, 0.01};
+const double Dkf[] = {0.02, 0.02, 0.02, 0.02, 0.02};
 
 //PID input/output variable arrays
 double Setpoint[5];
@@ -34,9 +34,8 @@ int pot[] = {0, 0, 0, 0, 0};
 
 
 //serial input and positioning variables
-float val = 0;
 float pos[] = {90, 90, 90, 90, 90, 90, 90, 90, 0, 0}; // joint1, joint2, joint3, joint4, joint5, hand1, hand2, hand3, enable move, fast mode
-int num = 0;
+
 
 //arrays for pin values
 const byte pinPOT[] = {A0, A1, A2, A3, A4}; //analog inputs that the feedback potentiometers are attached to
@@ -71,7 +70,7 @@ void loop() {
 
   if (pos[8] == 1) { //check that the motor-enable value has been set to 1, it's default is 0.
     digitalWrite(pinEstop,HIGH);
-     for (byte i = 0; i < 5; i++) {   //iterate through each joint
+     for (byte i = 4; i < 5; i++) {   //iterate through each joint
   
        if (pos[9] == 1) {
          PidP[i]->SetTunings(Pkf[i], Ikf[i], Dkf[i]);
@@ -80,6 +79,7 @@ void loop() {
        }
        
        pot[i] = analogRead(pinPOT[i]);               //get the inputs for the PID controller and run Compute() to put the output in Output[]
+       
        Setpoint[i] = map(pos[i], 0, 180, -255, 255);
        Input[i] = map(pot[i], 0, 1023, -255, 255);
         PidP[i]->Compute(); // uses the -> operater instead of the . operater because PidP is a pointer, not the actual object
@@ -91,8 +91,9 @@ void loop() {
        else if (Output[i] < 0) {
          if(i != 0 && i != 1){
           analogWrite(pinPWM[i], 255 - (abs(Output[i])));   //flip-flop the pwm signal, because the direction is now HIGH and the difference should still be the same
+         digitalWrite(pinDIR[i], HIGH);
          } else{
-           analogWrite(pinPWM[i], Output[i]); //because the turret motor is run off of a different motor driver chip that does not need flippy-floppy PWM
+           analogWrite(pinPWM[i], abs(Output[i])); //because the turret motor is run off of a different motor driver chip that does not need flippy-floppy PWM
            digitalWrite(pinDIR[i], HIGH);
          }
       }
@@ -111,7 +112,7 @@ void loop() {
 //handler for serial input
 void serialEvent() {
   if (Serial.available()) {  //makes sure that all the data is read if multiple sends happen
-    for ( i = 0; i < 9; i++;) {
+    for (int i = 0; i < 10; i++) {
       pos[i] = Serial.parseFloat();  //data coming in loks like this: "a90.3a180.5a49.7 etc.", with the charactors being neccesary for clean separation
     }
     Serial.println("A");
