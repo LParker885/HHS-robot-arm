@@ -68,9 +68,9 @@ void setup() {
 
 void loop() {
 
-  if (pos[8] == 1) { //check that the motor-enable value has been set to 1, it's default is 0.
+  while (pos[8] == 1) { //check that the motor-enable value has been set to 1, it's default is 0.
     digitalWrite(pinEstop,HIGH);
-     for (byte i = 4; i < 5; i++) {   //iterate through each joint
+     for (byte i = 0; i < 5; i++) {   //iterate through each joint
   
        if (pos[9] == 1) {
          PidP[i]->SetTunings(Pkf[i], Ikf[i], Dkf[i]);
@@ -102,9 +102,8 @@ void loop() {
       servoP[i - 5]->write(pos[i]); // uses the -> operater instead of the . operater because servoP is a pointer, not the actual object
     }
     
-  }else{
-    digitalWrite(pinEstop,LOW);
   }
+    digitalWrite(pinEstop,LOW);
 }
 
 
