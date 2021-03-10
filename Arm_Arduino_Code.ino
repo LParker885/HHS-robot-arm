@@ -70,8 +70,7 @@ void setup() {
 
 void loop() {
 
-  while (pos[8] == 1) { //check that the motor-enable value has been set to 1, it's default is 0.
-  getSerial();
+  if (pos[8] == 1) { //check that the motor-enable value has been set to 1, it's default is 0.
     digitalWrite(pinEstop, HIGH);
     for (byte i = 0; i < 5; i++) {   //iterate through each joint
 
@@ -105,22 +104,22 @@ void loop() {
       servoP[i - 5]->write(pos[i]); // uses the -> operater instead of the . operater because servoP is a pointer, not the actual object
     }
 
+  } else {
+    digitalWrite(pinEstop, LOW);
   }
-  digitalWrite(pinEstop, LOW);
-  getSerial();
 }
 
 
 
 //handler for serial input
-void getSerial() {
+void serialEvent() {
   if (Serial.available() > 0) {
-    int p = Serial.parseInt();
-    Serial.println("A");
-    //while(!Serial.available()){Serial.println("A");}
-    float v = Serial.parseFloat();
-    Serial.println("A");
+    int p = (Serial.readString().toInt());
+    while (!Serial.available()) {
+      Serial.print("A");
+    }
+    float v = (Serial.readString().toFloat());
+    Serial.print("A");
     pos[p] = v;
-    
   }
 }
