@@ -2,17 +2,18 @@
 import serial
 import time
 
-data = [90,90,90,90,90,90,90,90,1,0] #j1,j2,j3,j4,j5,h1,h2,h3,moveEnable,fast
+data = [90.12,90.12,90.12,90.12,90.12,90.12,90.12,90.12,1,0] #j1,j2,j3,j4,j5,h1,h2,h3,moveEnable,fast
 
-ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
-ser.flush()
+ser = serial.Serial('/dev/ttyACM0', 500000, timeout=1)
+dataIn = ser.readline().decode('utf-8').rstrip()
+while dataIn != 'A':
+    ser.write("A".encode('utf-8'))
+    time.sleep(0.001)
+    dataIn = ser.readline().decode('utf-8').rstrip()
+    print(dataIn)
 
-def changeVals(whichone,val):
-    data[whichone] = val
 
-def sendToArduino():
-    ser.write(f"a{data[0]}a{data[1]}a{data[2]}a{data[3]}a{data[4]}a{data[5]}a{data[6]}a{data[7]}a{data[8]}a{data[9]}a".encode('utf-8'))
-    
 while True:
-    sendToArduino()
-    time.sleep(3)
+
+    ser.write(f"{data[0]},{data[1]},{data[2]},{data[3]},{data[4]},{data[5]},{data[6]},{data[7]},{data[8]},{data[9]},".encode('utf-8'))
+    time.sleep(0.2)
