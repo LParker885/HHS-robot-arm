@@ -8,7 +8,7 @@ const double Pk[] = {0.5, 0.5, 0.5, 0.5, 0.5};
 const double Ik[] = {0, 0, 0, 0, 0};
 const double Dk[] = {0, 0, 0, 0, 0};
 
-const double Pkf[] = {2, 2, 2, 2, 2};
+const double Pkf[] = {4, 4, 4, 4, 4};
 const double Ikf[] = {0.01, 0.01, 0.01, 0.01, 0.01};
 const double Dkf[] = {0.02, 0.02, 0.02, 0.02, 0.02};
 
@@ -37,6 +37,8 @@ int pot[] = {0, 0, 0, 0, 0};
 
 //serial input and positioning variables
 float pos[] = {90, 90, 90, 90, 90, 90, 90, 90, 0, 0}; // joint1, joint2, joint3, joint4, joint5, hand1, hand2, hand3, enable move, fast mode
+byte timeout = 0;
+int sendResolution = 180;
 
 
 //arrays for pin values
@@ -63,26 +65,29 @@ void setup() {
     servoP[i]->attach(pinHAND[i]);
   }
 
-  Serial.begin(115200); //start up the serial communication through the onboard USB port to talk to the Raspberry Pi or whatever else
+  Serial.begin(500000); //start up the serial communication through the onboard USB port to talk to the Raspberry Pi or whatever else
+  while (!Serial.available()) {
+
+    delay(10);
+  }
+  Serial.println('A');
+
 }
 
 
 
 void loop() {
-
+  getSerial();
   if (pos[8] == 1) { //check that the motor-enable value has been set to 1, it's default is 0.
+
     digitalWrite(pinEstop, HIGH);
+
     for (byte i = 0; i < 5; i++) {   //iterate through each joint
 
-      if (pos[9] == 1) {
-        PidP[i]->SetTunings(Pkf[i], Ikf[i], Dkf[i]);
-      } else {
-        PidP[i]->SetTunings(Pk[i], Ik[i], Dk[i]);
-      }
 
       pot[i] = analogRead(pinPOT[i]);               //get the inputs for the PID controller and run Compute() to put the output in Output[]
-
-      Setpoint[i] = map(pos[i], 0, 180, -255, 255);
+      
+      Setpoint[i] = map(pos[i], 0, sendResolution, -255, 255);
       Input[i] = map(pot[i], 0, 1023, -255, 255);
       PidP[i]->Compute(); // uses the -> operater instead of the . operater because PidP is a pointer, not the actual object
 
@@ -104,22 +109,56 @@ void loop() {
       servoP[i - 5]->write(pos[i]); // uses the -> operater instead of the . operater because servoP is a pointer, not the actual object
     }
 
-  } else {
+  }else if (pos[8] == 0) {
     digitalWrite(pinEstop, LOW);
+    for (byte i = 0; i < 5; i++) {
+      analogWrite(pinPWM[i], 0);
+      digitalWrite(pinDIR[i], LOW);
+      if (pos[9] == 1) {
+        PidP[i]->SetTunings(Pkf[i], Ikf[i], Dkf[i]);
+      } else {
+        PidP[i]->SetTunings(Pk[i], Ik[i], Dk[i]);
+      }
+    }
+
   }
 }
 
 
 
-//handler for serial input
-void serialEvent() {
-  if (Serial.available() > 0) {
-    int p = (Serial.readString().toInt());
-    while (!Serial.available()) {
-      Serial.print("A");
+void getSerial() {
+  if (Serial.available()) {
+  
+    String rxString = "";
+    String strArr[10]; //Set the size of the array to equal the number of values you will be receiveing.
+    //Keep looping until there is something in the buffer.
+
+    while (Serial.available()) {
+      //Delay to allow byte to arrive in input buffer.
+      delay(2);
+      //Read a single character from the buffer.
+      char ch = Serial.read();
+      //Append that single character to a string.
+      rxString += ch;
+     
     }
-    float v = (Serial.readString().toFloat());
-    Serial.print("A");
-    pos[p] = v;
+    int stringStart = 0;
+    int arrayIndex = 0;
+    for (int i = 0; i < rxString.length(); i++) {
+      //Get character and check if it's our "special" character.
+      if (rxString.charAt(i) == ',') {
+        //Clear previous values from array.
+        strArr[arrayIndex] = "";
+        //Save substring into array.
+        strArr[arrayIndex] = rxString.substring(stringStart, i);
+        //Set new string starting point.
+        stringStart = (i + 1);
+        char buf[strArr[arrayIndex].length() + 1];
+        strArr[arrayIndex].toCharArray(buf, strArr[arrayIndex].length() + 1);
+        pos[arrayIndex] = atoi(buf);
+        arrayIndex++;
+      }
+    }
   }
+ 
 }
