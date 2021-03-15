@@ -1,2 +1,9 @@
 # Robot arm!
-this stuff is for the robot arm at HHS. It will have: the code for the arduino(s?) that do the base level motor control, some simple python examples for the higher-level raspberry pi control that will talk to the arm, some pictures, some schematics, the CAD for the first hand, and whatever else I feel like putting in it that relates.
+This code is for the robot arm at HHS. 
+It has:
+- the code for the arduino inside the robot arm
+- a simple test for the serial communication between the raspberry pi inside the robot arm and the arduino
+- a folder with networking demos:
+-- the python module that allows them to be pretty (network.py)
+-- the robot-arm side python for recieving the sweep test
+-- the code for the other pi for sending the sweep test
