@@ -36,9 +36,8 @@ int pot[] = {0, 0, 0, 0, 0};
 
 
 //serial input and positioning variables
-float pos[] = {90, 90, 90, 90, 90, 90, 90, 90, 0, 0}; // joint1, joint2, joint3, joint4, joint5, hand1, hand2, hand3, enable move, fast mode
+float pos[] = {90, 90, 90, 90, 90, 90, 90, 90, 0, 0, 180, 0, 4, 4, 4, 4, 4, 0.01, 0.01, 0.01, 0.01, 0.01, 0.02, 0.02, 0.02, 0.02, 0.02}; // joint1, joint2, joint3, joint4, joint5, hand1, hand2, hand3, enable move, fast mode, input range, tuning enable/mode, tunings
 byte timeout = 0;
-int sendResolution = 180;
 
 
 //arrays for pin values
@@ -87,7 +86,7 @@ void loop() {
 
       pot[i] = analogRead(pinPOT[i]);               //get the inputs for the PID controller and run Compute() to put the output in Output[]
       
-      Setpoint[i] = map(pos[i], 0, sendResolution, -255, 255);
+      Setpoint[i] = map(pos[i], 0, pos[10], -255, 255);
       Input[i] = map(pot[i], 0, 1023, -255, 255);
       PidP[i]->Compute(); // uses the -> operater instead of the . operater because PidP is a pointer, not the actual object
 
@@ -120,7 +119,19 @@ void loop() {
         PidP[i]->SetTunings(Pk[i], Ik[i], Dk[i]);
       }
     }
-
+    if(pos[11] == 1){
+       for (byte i = 0; i < 4; i++) {
+         Pk[i] = pos[12+i];
+         Ik[i] = pos[17+i];
+         Dk[i] = pos[21+i];
+       }
+    } else if(pos[11] == 2){
+       for (byte i = 0; i < 4; i++) {
+         Pkf[i] = pos[12+i];
+         Ikf[i] = pos[17+i];
+         Dkf[i] = pos[21+i];
+       }
+    }
   }
 }
 
@@ -130,7 +141,7 @@ void getSerial() {
   if (Serial.available()) {
   
     String rxString = "";
-    String strArr[10]; //Set the size of the array to equal the number of values you will be receiveing.
+    String strArr[27]; //Set the size of the array to equal the number of values you will be receiveing.
     //Keep looping until there is something in the buffer.
 
     while (Serial.available()) {
