@@ -27,10 +27,10 @@ def getNet(data):
 network.wait(whenHearCall=getNet)
 
 while network.isConnected():
-    ser.write(f"{data[0]},{data[1]},{data[2]},{data[3]},{data[4]},{data[5]},{data[6]},{data[7]},{data[8]},{data[9]},".encode('utf-8'))
+    ser.write(f"{data[0]},{data[1]},{data[2]},{data[3]},{data[4]},{data[5]},{data[6]},{data[7]},{data[8]},{data[9]}".encode('utf-8'))
     time.sleep(0.1)
 
-ser.write(f"{data[0]},{data[1]},{data[2]},{data[3]},{data[4]},{data[5]},{data[6]},{data[7]},{0},{data[9]},".encode('utf-8'))
+ser.write(f"{data[0]},{data[1]},{data[2]},{data[3]},{data[4]},{data[5]},{data[6]},{data[7]},{0},{data[9]}".encode('utf-8'))
 
 
 
