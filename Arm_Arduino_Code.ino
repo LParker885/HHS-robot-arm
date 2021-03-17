@@ -64,7 +64,7 @@ void setup() {
     servoP[i]->attach(pinHAND[i]);
   }
 
-  Serial.begin(500000); //start up the serial communication through the onboard USB port to talk to the Raspberry Pi or whatever else
+  Serial.begin(1000000); //start up the serial communication through the onboard USB port to talk to the Raspberry Pi or whatever else
   while (!Serial.available()) {
 
     delay(10);
