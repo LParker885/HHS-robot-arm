@@ -4,13 +4,13 @@
 
 
 //PID tuning variables (in arrays of course for iteration)
-const double Pk[] = {0.5, 0.5, 0.5, 0.5, 0.5};
-const double Ik[] = {0, 0, 0, 0, 0};
-const double Dk[] = {0, 0, 0, 0, 0};
+double Pk[] = {0.5, 0.5, 0.5, 0.5, 0.5};
+double Ik[] = {0, 0, 0, 0, 0};
+double Dk[] = {0, 0, 0, 0, 0};
 
-const double Pkf[] = {4, 4, 4, 4, 4};
-const double Ikf[] = {0.01, 0.01, 0.01, 0.01, 0.01};
-const double Dkf[] = {0.02, 0.02, 0.02, 0.02, 0.02};
+double Pkf[] = {4, 4, 4, 4, 4};
+double Ikf[] = {0.01, 0.01, 0.01, 0.01, 0.01};
+double Dkf[] = {0.02, 0.02, 0.02, 0.02, 0.02};
 
 //PID input/output variable arrays
 double Setpoint[5];
@@ -85,7 +85,7 @@ void loop() {
 
 
       pot[i] = analogRead(pinPOT[i]);               //get the inputs for the PID controller and run Compute() to put the output in Output[]
-      
+
       Setpoint[i] = map(pos[i], 0, pos[10], -255, 255);
       Input[i] = map(pot[i], 0, 1023, -255, 255);
       PidP[i]->Compute(); // uses the -> operater instead of the . operater because PidP is a pointer, not the actual object
@@ -108,7 +108,7 @@ void loop() {
       servoP[i - 5]->write(pos[i]); // uses the -> operater instead of the . operater because servoP is a pointer, not the actual object
     }
 
-  }else if (pos[8] == 0) {
+  } else if (pos[8] == 0) {
     digitalWrite(pinEstop, LOW);
     for (byte i = 0; i < 5; i++) {
       analogWrite(pinPWM[i], 0);
@@ -119,19 +119,22 @@ void loop() {
         PidP[i]->SetTunings(Pk[i], Ik[i], Dk[i]);
       }
     }
-    if(pos[11] == 1){
-       for (byte i = 0; i < 4; i++) {
-         Pk[i] = pos[12+i];
-         Ik[i] = pos[17+i];
-         Dk[i] = pos[21+i];
-       }
-    } else if(pos[11] == 2){
-       for (byte i = 0; i < 4; i++) {
-         Pkf[i] = pos[12+i];
-         Ikf[i] = pos[17+i];
-         Dkf[i] = pos[21+i];
-       }
+    if (pos[11] == 1) {
+      if (pos[9] == 0) {
+        for (byte i = 0; i < 4; i++) {
+          Pk[i] = pos[12 + i];
+          Ik[i] = pos[17 + i];
+          Dk[i] = pos[21 + i];
+        }
+      } else if (pos[9] == 1) {
+        for (byte i = 0; i < 4; i++) {
+          Pkf[i] = pos[12 + i];
+          Ikf[i] = pos[17 + i];
+          Dkf[i] = pos[21 + i];
+        }
+      }
     }
+
   }
 }
 
@@ -139,7 +142,7 @@ void loop() {
 
 void getSerial() {
   if (Serial.available()) {
-  
+
     String rxString = "";
     String strArr[27]; //Set the size of the array to equal the number of values you will be receiveing.
     //Keep looping until there is something in the buffer.
@@ -151,7 +154,7 @@ void getSerial() {
       char ch = Serial.read();
       //Append that single character to a string.
       rxString += ch;
-     
+
     }
     int stringStart = 0;
     int arrayIndex = 0;
@@ -171,5 +174,5 @@ void getSerial() {
       }
     }
   }
- 
+
 }
