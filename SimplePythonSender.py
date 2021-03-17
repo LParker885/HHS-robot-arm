@@ -4,7 +4,7 @@ import time
 
 data = [90.12,90.12,90.12,90.12,90.12,90.12,90.12,90.12,1,0] #j1,j2,j3,j4,j5,h1,h2,h3,moveEnable,fast
 
-ser = serial.Serial('/dev/ttyACM0', 500000, timeout=1)
+ser = serial.Serial('/dev/ttyACM0', 1000000, timeout=1)
 dataIn = ser.readline().decode('utf-8').rstrip()
 while dataIn != 'A':
     ser.write("A".encode('utf-8'))
