@@ -2,6 +2,7 @@ import thread
 import network
 import serial
 import time
+import math
 
 data = [90,90,90,90,90,90,90,90,0,0,360] #j1,j2,j3,j4,j5,h1,h2,h3,moveEnable,fast,resolution
 
@@ -32,6 +33,9 @@ def getNet(data):
     y = temp[2]
     ha1 = temp[3]
     ha2 = temp[4]
+    joint1 = r
+    joint3 = (math.acos(((joint1Length**2)+(joint2Length**2))-(math.sqrt((x**2)+((y-baseHeight)**2))/(2*joint2Length*joint1Length))/2
+    joint2 = ((math.acos(((joint1Length**2)+(math.sqrt((x**2)+((y-baseHeight)**2)-(joint2Length**2)))/(2*joint2Length*joint1Length))+(math.acos((y-baseHeight)/x)))/2
     
     #joint1 = r
     #joint3 = (cos⁻¹((joint1length²+joint2length²)-(sqrt(x²+(y-baseHeight)²))/(2*joint2length*joint1length))/2 (/2 for 360 res cuz 0-360=0-180)
