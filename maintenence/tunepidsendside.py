@@ -1,7 +1,6 @@
-# a simple chat between two computers over ethernet
 
 import network
-import sys
+
 
 network.call("169.168.1.101")
 
