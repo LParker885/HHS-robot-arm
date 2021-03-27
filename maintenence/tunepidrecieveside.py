@@ -4,7 +4,7 @@ import serial
 import time
 
 data = [90,90,90,90,90,90,90,90,0,0,180,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0] #j1,j2,j3,j4,j5,h1,h2,h3,moveEnable,fast,res,tunemode,p1,p2,p3,p4,p5,i1,i2,i3,i4,i5,d1,d2,d3,d4,d5
-
+#                                                                          0 1  2  3  4  5  6  7  8            9   10     11   12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 
 ser = serial.Serial('/dev/ttyACM0', 1000000, timeout=1)
 dataIn = ser.readline().decode('utf-8').rstrip()
 while dataIn != 'A':
@@ -20,9 +20,14 @@ def changeVals(whichone,val):
 def getNet(data):
     print(data)
     temp=data.split(',')
-    pos = temp[0]
-    val = temp[1]
-    changeVals(int(pos),float(val))
+    if temp[0] == 0:
+        pos = temp[1]
+        val = temp[2]
+        changeVals(int(pos),float(val))
+    else:
+        changeVals(int(temp[0])+11,float(temp[1]))
+        changeVals(int(temp[0])+16,float(temp[2]))
+        changeVals(int(temp[0])+21,float(temp[3]))
 
 network.wait(whenHearCall=getNet)
 
