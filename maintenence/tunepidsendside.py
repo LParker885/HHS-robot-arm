@@ -11,14 +11,13 @@ while network.isConnected():
   network.say(phrase)
   
   #send data like this: 
-  # 8,1   -- turns on motion
-  # 2,60  -- (0-4),(0,180) 0-4 for the 5 different joints, 0-180 to move them to see how they react. running the sweeptest too might help if you feel like doing a bunch of program switching. 
-  # 8,0   -- turns off motion
-  # 13,2    -- 11-15, P-value for that axis (11=0,12=1,13=2 etc.) SEE PROPER PID TUNING GUIDLINES TO ADJUST THESE VALUES OR YOU *WILL* CRASH THE MACHIENE!!!!!!!!!!!!
-  # 15,0.01 -- 16-20, I-value for that axis
-  # 22,0.02 -- 21-26, D-value for that axis
-  # 10,1  -- sends the updated tunings
-  #       -- wait maybe 5 seconds, maybe less
-  # 10,0  -- turn off tuning updating
+  # 0,8,1   -- turns on motion
+  # 0,2,60  -- (0-4),(0,180) 0-4 for the 5 different joints, 0-180 to move them to see how they react. running the sweeptest too might help if you feel like doing a bunch of program switching. 
+  # 0,8,0   -- turns off motion
+  # 0,11,1  -- turns on tuning
+  # 1,2,0.1,0.01 -- joint,kP,kI,kD  -- new tunings for PID on the joint, formatted as joint then proportional then integral then derivative. GO SLOW, DON'T MAKE TOO BIG OF CHANGES, OR IT *WILL* CRASH!!!!!!!
+  # 0,11,1  -- sends the updated tunings
+  #         -- wait a second
+  # 0,11,0  -- turn off tuning updating
   # do it all over again untill buttery smooth! 
   # once buttery smooth, record the pid values that you used for each joint, and re-flash the arduino sketch with those values in the right places. 
