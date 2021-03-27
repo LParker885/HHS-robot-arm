@@ -20,7 +20,7 @@ def changeVals(whichone,val):
 def getNet(data):
     print(data)
     temp=data.split(',')
-    if temp[0] == 0:
+    if imt(temp[0]) == 0:
         pos = temp[1]
         val = temp[2]
         changeVals(int(pos),float(val))
