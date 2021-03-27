@@ -11,6 +11,8 @@ while network.isConnected():
   network.say(phrase)
   
   #send data like this: 
+  # 0,9,1   -- OPTIONAL, turns on "fast mode" to tune the ideal optimal PID settings for most agile operation. otherwise, you are tuning the "learning mode" which moves slower to give more time to whack the estop in case of a crash. 
+  # 0,9,0   -- only necessary if fast mode has been turned on and you wish to also tune the learning mode. 
   # 0,8,1   -- turns on motion
   # 0,2,60  -- (0-4),(0,180) 0-4 for the 5 different joints, 0-180 to move them to see how they react. running the sweeptest too might help if you feel like doing a bunch of program switching. 
   # 0,8,0   -- turns off motion
