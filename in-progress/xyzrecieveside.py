@@ -44,7 +44,7 @@ def getNet(data):
     #data[0] = joint1
     #data[1] = joint2
     #data[2] = joint3
-    data[3] = ha1*2
+    data[3] = ha1*2 #?
     data[4] = ha2
 
 network.wait(whenHearCall=getNet)
