@@ -1,7 +1,7 @@
 const byte pinPOT[] = {A0, A1, A2, A3, A4}; //analog inputs that the feedback potentiometers are attached to
-const byte pinPWM[] = {3, 5, 6, 9, 11}; //PWM pins that the speed channel of motor control are attached to
-const byte pinDIR[] = {2, 4, 7, 8, 10}; //non-PWM pins that the direction channel of motor control are attached to
-const byte pinHAND[] = {14, 15, 16}; //pins the hand servo channels are attached to
+const byte pinPWM[] = {13, 5, 6, 9, 11}; //PWM pins that the speed channel of motor control are attached to
+const byte pinDIR[] = {14, 4, 7, 8, 12}; //non-PWM pins that the direction channel of motor control are attached to
+const byte pinHAND[] = {2, 3, 16}; //pins the hand servo channels are attached to
 const byte pinEstop = 17;
 
 void setup(){
