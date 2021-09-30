@@ -4,11 +4,11 @@
 
 
 //PID tuning variables (in arrays of course for iteration)
-double Pk[] = {0.5, 0.5, 0.5, 0.5, 0.5};
+double Pk[] = {0.1, 0.1, 0.1, 0.1,0.1};
 double Ik[] = {0, 0, 0, 0, 0};
 double Dk[] = {0, 0, 0, 0, 0};
 
-double Pkf[] = {4, 4, 4, 4, 4};
+double Pkf[] = {0.4, 0.4, 0.4, 0.4, 0.4};
 double Ikf[] = {0.01, 0.01, 0.01, 0.01, 0.01};
 double Dkf[] = {0.02, 0.02, 0.02, 0.02, 0.02};
 
@@ -47,17 +47,21 @@ const byte pinDIR[] = {14, 4, 7, 8, 12}; //non-PWM pins that the direction chann
 const byte pinHAND[] = {2, 3, 16}; //pins the hand servo channels are attached to
 const byte pinEstop = 17;
 
+
+const int top[] = {1000,1000,759,1000,850};
+const int bottom[] = {125,480,399,266,308};
+
+
 void setup() {
   pinMode(pinEstop, OUTPUT);
 
-  for (byte i = 0; i < 5; i++) { //iterate through the PID controllers to set them up
-    pinMode(pinPOT[i], INPUT); //set the pins for each motor controller and feedback pot to inputs/outputs
-    pinMode(pinPWM[i], OUTPUT);
-    pinMode(pinDIR[i], OUTPUT);
-    PidP[i]->SetMode(AUTOMATIC);
-    PidP[i]->SetOutputLimits(-255, 255); //set the output limits to -255 to 255 for arduino's analogWrite, with a negative for direction
-    PidP[i]->SetSampleTime(20);
-
+  for(int motorNumber = 0; motorNumber < 5; motorNumber++){
+    pinMode(pinPOT[motorNumber], INPUT); //set the pins for each motor controller and feedback pot to inputs/outputs
+    pinMode(pinPWM[motorNumber], OUTPUT);
+    pinMode(pinDIR[motorNumber], OUTPUT);
+    PidP[motorNumber]->SetMode(AUTOMATIC);
+    PidP[motorNumber]->SetOutputLimits(-255, 255); //set the output limits to -255 to 255 for arduino's analogWrite, with a negative for direction
+    PidP[motorNumber]->SetSampleTime(20);
   }
 
   for (byte i = 0; i < 3; i++) { //iterate through the servo objects to attach them to their proper pins
@@ -81,34 +85,40 @@ void loop() {
 
     digitalWrite(pinEstop, HIGH);
 
-    for (byte i = 0; i < 5; i++) {   //iterate through each joint
+   //only calibrating one joint at a time, so no iteration needed
+for(int motorNumber = 0; motorNumber < 5; motorNumber++){
+
+      pot[motorNumber] = analogRead(pinPOT[motorNumber]);               //get the inputs for the PID controller and run Compute() to put the output in Output[]
+
+      Setpoint[motorNumber] = map(pos[motorNumber], 0, pos[10], -255, 255);
+      Input[motorNumber] = map(pot[motorNumber], bottom[motorNumber], top[motorNumber], -255, 255);
+      PidP[motorNumber]->Compute(); // uses the -> operater instead of the . operater because PidP is a pointer, not the actual object
 
 
-      pot[i] = analogRead(pinPOT[i]);               //get the inputs for the PID controller and run Compute() to put the output in Output[]
 
-      Setpoint[i] = map(pos[i], 0, pos[10], -255, 255);
-      Input[i] = map(pot[i], 0, 1023, -255, 255);
-      PidP[i]->Compute(); // uses the -> operater instead of the . operater because PidP is a pointer, not the actual object
-
-      if (Output[i] > 0) {                    //these if statements account for forward and reverse without a second variable
-        analogWrite(pinPWM[i], Output[i]);
-        digitalWrite(pinDIR[i], LOW);
+ 
+      if (Output[motorNumber] > 0) {                    //these if statements account for forward and reverse without a second variable
+        analogWrite(pinPWM[motorNumber], Output[motorNumber]);
+        digitalWrite(pinDIR[motorNumber], LOW);
+       
       }
-      else if (Output[i] < 0) {
-        if (i != 0 && i != 1) {
-          analogWrite(pinPWM[i], 255 - (abs(Output[i])));   //flip-flop the pwm signal, because the direction is now HIGH and the difference should still be the same
-          digitalWrite(pinDIR[i], HIGH);
+      else if (Output[motorNumber] < 0) {
+        if (motorNumber != 0 && motorNumber != 1) {
+          analogWrite(pinPWM[motorNumber], 255 - (abs(Output[motorNumber])));   //flip-flop the pwm signal, because the direction is now HIGH and the difference should still be the same
+          digitalWrite(pinDIR[motorNumber], HIGH);
         } else {
-          analogWrite(pinPWM[i], abs(Output[i])); //because the turret motor is run off of a different motor driver chip that does not need flippy-floppy PWM
-          digitalWrite(pinDIR[i], HIGH);
+          analogWrite(pinPWM[motorNumber], abs(Output[motorNumber])); //because the turret motor is run off of a different motor driver chip that does not need flippy-floppy PWM
+          digitalWrite(pinDIR[motorNumber], HIGH);
         }
       }
+     
     }
-    for (byte i = 5; i < 8; i++) {  //iterate through the servo objects and set them to the specified positions
+    Serial.println();
+     for (byte i = 5; i < 8; i++) {  //iterate through the servo objects and set them to the specified positions
       servoP[i - 5]->write(pos[i]); // uses the -> operater instead of the . operater because servoP is a pointer, not the actual object
     }
-
-  } else if (pos[8] == 0) {
+  }
+else if (pos[8] == 0) {
     digitalWrite(pinEstop, LOW);
     for (byte i = 0; i < 5; i++) {
       analogWrite(pinPWM[i], 0);
