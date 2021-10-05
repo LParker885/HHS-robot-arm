@@ -15,13 +15,10 @@ Smoothed <float> sm5;
 Smoothed <float> *smP[] ={&sm1,&sm2,&sm3,&sm4,&sm5};
 
 //PID tuning variables (in arrays of course for iteration)
-double Pk[] = {0.01, 0.0, 0.0, 0.0,0.0};
-double Ik[] = {3, 0, 0, 0, 0};
-double Dk[] = {1, 0, 0, 0, 0};
+double Pk[] = {0.1, 0.0, 0.0, 0.0,0.0};
+double Ik[] = {0, 0, 0, 0, 0};
+double Dk[] = {0, 0, 0, 0, 0};
 
-double Pkf[] = {0.4, 0.4, 0.4, 0.4, 0.4};
-double Ikf[] = {0.01, 0.01, 0.01, 0.01, 0.01};
-double Dkf[] = {0.02, 0.02, 0.02, 0.02, 0.02};
 
 //PID input/output variable arrays
 double Setpoint[5];
