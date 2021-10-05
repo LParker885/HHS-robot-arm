@@ -15,13 +15,11 @@ Smoothed <float> sm5;
 Smoothed <float> *smP[] ={&sm1,&sm2,&sm3,&sm4,&sm5};
 
 //PID tuning variables (in arrays of course for iteration)
-double Pk[] = {0.01, 0.0, 0.0, 0.0,0.0};
-double Ik[] = {3, 0, 0, 0, 0};
-double Dk[] = {1, 0, 0, 0, 0};
+double Pk[] = {0.1, 0.0, 0.0, 0.0,0.0};
+double Ik[] = {0, 0, 0, 0, 0};
+double Dk[] = {0, 0, 0, 0, 0};
 
-double Pkf[] = {0.4, 0.4, 0.4, 0.4, 0.4};
-double Ikf[] = {0.01, 0.01, 0.01, 0.01, 0.01};
-double Dkf[] = {0.02, 0.02, 0.02, 0.02, 0.02};
+
 
 //PID input/output variable arrays
 double Setpoint[5];
@@ -38,9 +36,6 @@ PID *PidP[] = {&PID1, &PID2, &PID3, &PID4, &PID5}; //pointer array to allowe eac
 
 //servo objects for the servo channels going to the end effector
 Servo hand1;
-Servo hand2;
-Servo hand3;
-Servo *servoP[] = {&hand1, &hand2, &hand3}; //pointer array to allow each of these to be iterated through in a for loop
 
 //array to hold analog readings
 int pot[] = {0, 0, 0, 0, 0};
@@ -73,12 +68,11 @@ void setup() {
     PidP[motorNumber]->SetMode(AUTOMATIC);
     PidP[motorNumber]->SetOutputLimits(-255, 255); //set the output limits to -255 to 255 for arduino's analogWrite, with a negative for direction
     PidP[motorNumber]->SetSampleTime(20);
-    smP[motorNumber]->begin(SMOOTHED_EXPONENTIAL, 3);
+    smP[motorNumber]->begin(SMOOTHED_AVERAGE, 15);
   }
 
-  for (byte i = 0; i < 3; i++) { //iterate through the servo objects to attach them to their proper pins
-    servoP[i]->attach(pinHAND[i]);
-  }
+hand1.attach(pinHAND[2]);
+  
 
   Serial.begin(1000000); //start up the serial communication through the onboard USB port to talk to the Raspberry Pi or whatever else
   while (!Serial.available()) {
@@ -95,9 +89,8 @@ void loop() {
   getSerial();
   if (pos[8] == 1) { //check that the motor-enable value has been set to 1, it's default is 0.
 
-    digitalWrite(pinEstop, HIGH);
+   // digitalWrite(pinEstop, HIGH);
 
-   //only calibrating one joint at a time, so no iteration needed
 for(int motorNumber = 0; motorNumber < 5; motorNumber++){
 
       pot[motorNumber] = analogRead(pinPOT[motorNumber]);               //get the inputs for the PID controller and run Compute() to put the output in Output[]
@@ -119,7 +112,7 @@ for(int motorNumber = 0; motorNumber < 5; motorNumber++){
       else if (Output[motorNumber] <= 0) {
         if (motorNumber != 0 && motorNumber != 1) {
           analogWrite(pinPWM[motorNumber], 255 - (abs(Output[motorNumber])));   //flip-flop the pwm signal, because the direction is now HIGH and the difference should still be the same
-          digitalWrite(pinDIR[motorNumber], HIGH);
+          digitalWrite(pinDIR[motorNumber], LOW);
         } else {
           analogWrite(pinPWM[motorNumber], abs(Output[motorNumber])); //because the turret motor is run off of a different motor driver chip that does not need flippy-floppy PWM
           digitalWrite(pinDIR[motorNumber], HIGH);
@@ -128,12 +121,11 @@ for(int motorNumber = 0; motorNumber < 5; motorNumber++){
      
     }
  
-     for (byte i = 5; i < 8; i++) {  //iterate through the servo objects and set them to the specified positions
-      servoP[i - 5]->write(pos[i]); // uses the -> operater instead of the . operater because servoP is a pointer, not the actual object
-    }
+     
+      hand1.write(pos[5]); 
   }
 else if (pos[8] == 0) {
-    digitalWrite(pinEstop, LOW);
+   // digitalWrite(pinEstop, LOW);
     for (byte i = 0; i < 5; i++) {
       analogWrite(pinPWM[i], 0);
       digitalWrite(pinDIR[i], LOW);
