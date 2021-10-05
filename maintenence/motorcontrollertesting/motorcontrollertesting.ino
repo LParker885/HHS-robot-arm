@@ -6,25 +6,25 @@ void setup(){
 
 void loop(){
   
-  Serial.println("LOW, Speeding up");
+  Serial.println("LOW, Increasing");
   digitalWrite(14,LOW);
   for(int i = 0; i<256; i+= 10){
    analogWrite(13,i); 
    delay(100);
   }
-  Serial.println("LOW, Slowing down");
+  Serial.println("LOW, Decreasing");
   for(int i = 255; i>=0; i-= 10){
    analogWrite(13,i); 
    delay(100);
   }
   delay(1000);
-  Serial.println("HIGH, Speeding up");
+  Serial.println("HIGH, Increasing");
   digitalWrite(14,HIGH);
   for(int i = 0; i<256; i+= 10){
    analogWrite(13,i); 
    delay(100);
   }
-  Serial.println("HIGH, Slowing down");
+  Serial.println("HIGH, Decreasing");
   for(int i = 255; i>=0; i-= 10){
    analogWrite(13,i); 
    delay(100);
