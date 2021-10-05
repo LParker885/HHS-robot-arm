@@ -82,7 +82,17 @@ void loop(){
   analogWrite(13,1);
   digitalWrite(14,LOW);
   delay(1000);
+ 
+   Serial.println("HIGH, 128");
+  analogWrite(13,128);
+  digitalWrite(14,HIGH);
+  delay(1000);
   
+  Serial.println("LOW, 128");
+  analogWrite(13,128);
+  digitalWrite(14,LOW);
+  delay(1000);
+ 
   Serial.println("HIGH, 254");
   analogWrite(13,254);
   digitalWrite(14,HIGH);
