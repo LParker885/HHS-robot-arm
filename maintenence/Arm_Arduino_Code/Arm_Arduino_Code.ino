@@ -1,12 +1,23 @@
+
+
 #include <PID_v1.h>  //PID loop from http://playground.arduino.cc/Code/PIDLibrary
 #include <Servo.h>
+#include "Smuuthed.h"
 
+  
 
+//sensor smoothing objects
+Smoothed <float> sm1; 
+Smoothed <float> sm2;
+Smoothed <float> sm3; 
+Smoothed <float> sm4;
+Smoothed <float> sm5;
+Smoothed <float> *smP[] ={&sm1,&sm2,&sm3,&sm4,&sm5};
 
 //PID tuning variables (in arrays of course for iteration)
-double Pk[] = {0.1, 0.1, 0.1, 0.1,0.1};
-double Ik[] = {0, 0, 0, 0, 0};
-double Dk[] = {0, 0, 0, 0, 0};
+double Pk[] = {0.01, 0.0, 0.0, 0.0,0.0};
+double Ik[] = {3, 0, 0, 0, 0};
+double Dk[] = {1, 0, 0, 0, 0};
 
 double Pkf[] = {0.4, 0.4, 0.4, 0.4, 0.4};
 double Ikf[] = {0.01, 0.01, 0.01, 0.01, 0.01};
@@ -36,7 +47,7 @@ int pot[] = {0, 0, 0, 0, 0};
 
 
 //serial input and positioning variables
-float pos[] = {90, 90, 90, 90, 90, 90, 90, 90, 0, 0, 180, 0, 4, 4, 4, 4, 4, 0.01, 0.01, 0.01, 0.01, 0.01, 0.02, 0.02, 0.02, 0.02, 0.02}; // joint1, joint2, joint3, joint4, joint5, hand1, hand2, hand3, enable move, fast mode, input range, tuning enable/mode, tunings
+float pos[] = {90, 90, 90, 90, 90, 90, 90, 90, 0, 0, 180}; // joint1, joint2, joint3, joint4, joint5, hand1, hand2, hand3, enable move, fast mode, input range
 byte timeout = 0;
 
 
@@ -62,6 +73,7 @@ void setup() {
     PidP[motorNumber]->SetMode(AUTOMATIC);
     PidP[motorNumber]->SetOutputLimits(-255, 255); //set the output limits to -255 to 255 for arduino's analogWrite, with a negative for direction
     PidP[motorNumber]->SetSampleTime(20);
+    smP[motorNumber]->begin(SMOOTHED_EXPONENTIAL, 3);
   }
 
   for (byte i = 0; i < 3; i++) { //iterate through the servo objects to attach them to their proper pins
@@ -91,7 +103,9 @@ for(int motorNumber = 0; motorNumber < 5; motorNumber++){
       pot[motorNumber] = analogRead(pinPOT[motorNumber]);               //get the inputs for the PID controller and run Compute() to put the output in Output[]
 
       Setpoint[motorNumber] = map(pos[motorNumber], 0, pos[10], -255, 255);
-      Input[motorNumber] = map(pot[motorNumber], bottom[motorNumber], top[motorNumber], -255, 255);
+      
+      smP[motorNumber]->add(map(pot[motorNumber], bottom[motorNumber], top[motorNumber], -255, 255));
+      Input[motorNumber] = smP[motorNumber]->get();
       PidP[motorNumber]->Compute(); // uses the -> operater instead of the . operater because PidP is a pointer, not the actual object
 
 
@@ -102,7 +116,7 @@ for(int motorNumber = 0; motorNumber < 5; motorNumber++){
         digitalWrite(pinDIR[motorNumber], LOW);
        
       }
-      else if (Output[motorNumber] < 0) {
+      else if (Output[motorNumber] <= 0) {
         if (motorNumber != 0 && motorNumber != 1) {
           analogWrite(pinPWM[motorNumber], 255 - (abs(Output[motorNumber])));   //flip-flop the pwm signal, because the direction is now HIGH and the difference should still be the same
           digitalWrite(pinDIR[motorNumber], HIGH);
@@ -113,7 +127,7 @@ for(int motorNumber = 0; motorNumber < 5; motorNumber++){
       }
      
     }
-    Serial.println();
+ 
      for (byte i = 5; i < 8; i++) {  //iterate through the servo objects and set them to the specified positions
       servoP[i - 5]->write(pos[i]); // uses the -> operater instead of the . operater because servoP is a pointer, not the actual object
     }
@@ -123,27 +137,9 @@ else if (pos[8] == 0) {
     for (byte i = 0; i < 5; i++) {
       analogWrite(pinPWM[i], 0);
       digitalWrite(pinDIR[i], LOW);
-      if (pos[9] == 1) {
-        PidP[i]->SetTunings(Pkf[i], Ikf[i], Dkf[i]);
-      } else {
-        PidP[i]->SetTunings(Pk[i], Ik[i], Dk[i]);
-      }
+      
     }
-    if (pos[11] == 1) {
-      if (pos[9] == 0) {
-        for (byte i = 0; i < 4; i++) {
-          Pk[i] = pos[12 + i];
-          Ik[i] = pos[17 + i];
-          Dk[i] = pos[21 + i];
-        }
-      } else if (pos[9] == 1) {
-        for (byte i = 0; i < 4; i++) {
-          Pkf[i] = pos[12 + i];
-          Ikf[i] = pos[17 + i];
-          Dkf[i] = pos[21 + i];
-        }
-      }
-    }
+ 
 
   }
 }
@@ -154,7 +150,7 @@ void getSerial() {
   if (Serial.available()) {
 
     String rxString = "";
-    String strArr[27]; //Set the size of the array to equal the number of values you will be receiveing.
+    String strArr[11]; //Set the size of the array to equal the number of values you will be receiveing.
     //Keep looping until there is something in the buffer.
 
     while (Serial.available()) {
