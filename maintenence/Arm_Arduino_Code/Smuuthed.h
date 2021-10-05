@@ -1,5 +1,5 @@
 
-
+#include <Arduino.h>
  
 #define SMOOTHED_AVERAGE 1
 #define SMOOTHED_EXPONENTIAL 2
