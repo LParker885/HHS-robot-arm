@@ -1,3 +1,6 @@
+
+#inverse kinematics attempt 1: will most likely just use a library for this. 
+
 import thread
 import network
 import serial
