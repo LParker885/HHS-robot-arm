@@ -1,3 +1,4 @@
+# this is the code that the Raspberry Pi inside of the robot arm would be told to run via SSH. 
 
 #inverse kinematics attempt 1: will most likely just use a library for this. 
 
