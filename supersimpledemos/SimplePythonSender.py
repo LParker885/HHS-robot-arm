@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+
+# this is the simlest demo. It simply moves the robot arm to a default position, not quite perfectly 90 degrees to demonstrate float functionality. It would be run on the raspberry pi inside of the robot arm. 
+
+
 import serial
 import time
 
