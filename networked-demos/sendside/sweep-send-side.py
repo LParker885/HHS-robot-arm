@@ -1,4 +1,5 @@
 #sweep test!
+# this is an example of the kind of code that a student in a computer science class would write on their raspberry pi, which would talk to the raspberry pi inside of the robot arm. 
 import network
 import time
 ip = "169.168.1.101"
