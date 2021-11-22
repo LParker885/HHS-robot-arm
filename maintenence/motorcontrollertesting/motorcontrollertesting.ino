@@ -1,3 +1,5 @@
+// a simple arduino sketch to make sure that a particular motor controller is functioning properly. Or rather, to figure out what the motor controller is doing when the arduino thinks that it is functioning properly. 
+
 void setup(){
  pinMode(13,OUTPUT);
  pinMode(14,OUTPUT);
