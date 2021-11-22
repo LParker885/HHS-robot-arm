@@ -1,6 +1,7 @@
 # network.py  2013 @whaleygeek
 
-# this is what lets the chat and sweeptest programs be so simple
+# this is what lets the chat and sweeptest programs be so simple, many, many, many thanks to @whaleygeek for this wondurful code. 
+# link to original code here: https://github.com/whaleygeek/mb_jb/blob/master/network.py
 
 try:
   import thread
