@@ -1,4 +1,4 @@
-
+# this is the python script that would be called to run on the raspberry pi inside of the robot arm. It parses the network data that it recieves, and sends the properly formatted data to the arduino via serial. 
 import network
 import serial
 import time
