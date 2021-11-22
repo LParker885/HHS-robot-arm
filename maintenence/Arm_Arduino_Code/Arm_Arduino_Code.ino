@@ -1,4 +1,5 @@
-
+// this is the definitley not current code that will be uploaded to the arduino micro which is running the whole show. It takes serail data from the Raspberry Pi, in such a way as to not slow down the PID loops, and then
+// parses it so that it can tell where it needs to go. Better code coming soon, with a removal of the smoothed library and the real PID tunings. 
 
 #include <PID_v1.h>  //PID loop from http://playground.arduino.cc/Code/PIDLibrary
 #include <Servo.h>
