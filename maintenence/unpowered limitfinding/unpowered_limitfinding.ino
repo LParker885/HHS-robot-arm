@@ -1,5 +1,5 @@
 
-
+// this program is so that the potentiometer values at the limits of motion can be recorded for tuning, with manual motion of the arm. 
 
 void setup() {
 Serial.begin(9600);
