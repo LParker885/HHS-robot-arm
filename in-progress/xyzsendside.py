@@ -1,4 +1,7 @@
-#sweep test!
+#this is the code that a student in a computer science class would need to write
+
+
+
 import network
 import time
 import sys
