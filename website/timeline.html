@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>HHS Robot Arm</title>
+    <meta name="description" content="The website for all things robot arm!" />
+    <style>
+        body {
+            background-color: rgb(45, 75, 109);
+            color: rgb(0, 255, 0);
+        }
+
+            
+        
+
+        #links {
+            background-color: rgb(45, 75, 109);
+
+            position: fixed;
+            margin-left: 40%;
+            margin-top: 100px;
+            width: 300px;
+
+            text-align: center;
+        }
+        #storytime{
+            background-color:rgb(31, 51, 77);
+            padding-bottom:50px;
+            padding-top:25px;
+            margin-bottom:100px;
+
+
+
+        }
+    
+        a:link {
+            color: rgb(0, 200, 0);
+        }
+
+        a:visited {
+            color: rgb(0, 200, 200);
+        }
+
+        a:hover {
+            color: rgb(0, 255, 0);
+        }
+
+        a:active {
+            color: rgb(0, 0, 255);
+        }
+    </style>
+</head>
+
+  <body>
+    <center><h1 id="headertext">Timeline!</h1></center>
+    <center><p>This page is the timeline - with pictures - of how development has happened for the robot arm. <br>
+      
+    </p></center>
+
+    <center id="storytime">
+
+        <p>
+        No pictures were taken for the first couple of years, unfortunatley. 
+        </p>
+        <br>
+        
+        <p>
+           <h3>2019-2020 school year</h3> 
+        
+           Project is discovered, permission is gained to "have at it" and figure out how the robot arm works. 
+           <br> 
+           Once the arm has been rendered re-operational as its designers intended it to be, it is realized that the control system is so outdated as to be nearly unusable. 
+        <br>
+        Planning is started for how to convert the arm to a new control system. 
+        </p>
+
+            <br>
+
+
+         <p>
+             <h3>2020-2021 school year</h3>
+            Not too much tangible progress this year, partly due to extremely limitations on time in the lab due to shudowns and quarentines.
+            <br>
+            However, the method for controlling the robot arm is prototyped, and most of the framework for the code is written.
+            <br>
+            Additionaly, later in the year, a prototype base is welded out of steel box tube, and re-wiring of the robot arm begins. 
+
+        </p>
+        <br>
+
+        <p>
+            <h3>2021-2022 school year</h3>
+            A base is built out of an old belt sander's pedestal and some very large box tube, with caster wheels bolted on. 
+            <br>
+            <br>
+            First picture! 
+            <br>
+            The power conversion components have been installed inside the box, and the front switch panel has been wired up. 
+            <br>
+            In the picture, we can see that connection of the wires from the robot arm into its base has begun.
+            <br>
+            Later, these will be managed with heat-shrink tubing. 
+            <br>
+            <img src="pictures/65091245203__D5458D51-FA61-4182-A01D-2706670078EB.jpg" width=25%>
+
+            <br>
+            <br>
+            Before this picture, some prototype sheet metal button panels that were manufactured to hold power switches and a temporary emergency stop button.
+            <br>
+            The picture shows the 3D printed nonfunctional prototype end effector (hand) attached to the end of the robot arm, in addition to the beginnings of a closed loop 
+            <br> feedback system on the trunk of the arm, attached with blue tape. This was simply for a proof of concept for the closed loop control, as the original system 
+            <br> for controlling the arm was based off of encoders and dead reckoning. 
+            <br>
+            <img src="pictures/IMG_0031.jpg" width = 25%>
+            <br>
+            This picture shows the switch panels somewhat better. 
+            <br>
+            <img src="pictures/IMG_0029.jpg" width = 25%>
+            <br>
+            This picture is a close up of the wrist and hand assembly, with some tape to hold the prototype feedback wire. 
+            <br>
+            <img src="pictures/IMG_0030.jpg" width = 25%>
+            <br>
+            In this picture, in addition to a measurement for future hand attachments, the 3D printed retainer for the wrist rotation feedback wire can be seen, in black behind the calipers. 
+            <br>
+            <img src="pictures/IMG_0081.jpg" width = 25%>
+            <br>
+            The innards exposed! If you look closely, you can see the connector for the front panel dangling in midair on the left, as the front panel has been removed. Three of the motor control boards 
+            <br> are temporarily attached torwards the back, in front of the transformer and capacitor for motor power, and right next to the modified server power supply for logic power and auxiliary 12V. 
+            <br> In front of the motor control boards is a breadboard with the arduino micro which controls the arm seated on it. This breadboard is mainly serving as power distribution at this point. 
+            <br> In the very front of the picture is the pair of relays serving as the emergency stop logic, which shut off all power to the system when one button is pressed, and restore it when another
+            <br> is pressed. This is not ideal, and will be replaced with a true emergency stop button.  
+            <br>
+            <img src="pictures/IMG_0096.jpg" width = 25%>
+            <br>
+            This is a top-down view of the same scene, with the large cable of wires running to the robot arm going right across the front of the picture. 
+            <br>
+            <img src="pictures/IMG_0097.jpg" width = 25%>
+            <br>
+            Finally, heatshrink tubing has been added to clean up the junction between control box and arm!
+            <br>
+            <img src="pictures/IMG_0098.jpg" width = 25%>
+            <br>
+            The next couple of pictures show the insides of the robot arm, as work is being done to wire it up for the prototype potentiometers, which are the 
+            <br> brightly colored 3D prints attached to some of the joints of the robot arm.   
+            <br>
+            <img src="pictures/IMG_0099.jpg" width = 25%>
+            <br>
+            <br>
+            <img src="pictures/IMG_0100.jpg" width = 25%>
+            <br>
+            <br>
+            <img src="pictures/IMG_0101.jpg" width = 25%>
+            <br>
+            
+            The control box all emptied out, with standoffs mounted in preparation to recieve the circuit board!
+            <br>
+            <img src="pictures/IMG_0111.jpg" width = 25%>
+            <br>
+
+            A circuit board was designed and ordered with JLCPCB, who manufactured five boards and assembled two of them. They are beautiful. 
+            Fronts and backs of empty and assembled boards:
+            <br>
+            <img src="pictures/IMG_0117.jpg" width = 25%>
+            <br>
+            <br>
+            <img src="pictures/IMG_0118.jpg" width = 25%>
+            <br>
+            <br>
+            <img src="pictures/IMG_0114.jpg" width = 25%>
+            <br>
+            <br>
+            <img src="pictures/IMG_0115.jpg" width = 25%>
+            <br>
+
+            Here is the board with motor drivers attached, the arduino micro mounted, and everything all wired up!
+            <br>
+            <img src="pictures/IMG_0112.jpg" width = 25%>
+            <br>
+
+            The board installed, ready for wires to the arm above to be connected!
+            <br>
+            <img src="pictures/IMG_0119.jpg" width = 25%>
+            <br>
+
+
+            Top-down view of the same - compare to the top-down view of everything previously!
+            <br>
+            <img src="pictures/IMG_0120.jpg" width = 25%>
+            <br>
+            
+            <br>
+            After this point, all of the prototype potentiometers were wired up. Next came the long and arduous task of fixing all of the bugs in the code, 
+            <br> rewiring some mistakes, and then tuning the PID loops on the arduino micro, which took user input and determined how to move to get the robot arm to where 
+            <br> it needed to be and keep it there. There are some videos of this process that will be added soon. 
+            <br> Importantly, though, the proof of concept for the control method worked, and was able to position-keep through its whole range of motion. 
+            <br> This brought up another problem, though: Because the proto-potentiometers that had been in place were made from nychrome foam-cutting wire, and were being 
+            <br> read across by rather not very well held on copper wires as wipers, there was a lot of jittering and wandering in the signal. It definitley did not help that
+            <br> the longest wire of them all had a resistance of just 4 ohms. Shudder. 
+            <br> So. Some proper 10-turn potentiometers were ordered, and some mounts for them were 3D printed. 
+            <br>
+            Here is the potentiometer for the first joint attached, with a belt for actuating it attached to a prototype ring. 
+            <br>
+            <img src="pictures/IMG_0239.jpg" width = 25%>
+            <br>
+            The prototype ring, however, did not have near enough clearance as was needed, which was fine, because it was just a prototype. 
+            <br>
+            <img src="pictures/IMG_0240.jpg" width = 25%>
+            <br>
+            To solve the clearance problem, holes were drilled and tapped into the cosmetic portion of the trunk, as can be seen in the next few pictures, for the belt to be attached to. 
+            <br>
+            <img src="pictures/IMG_0261.jpg" width = 25%>
+            <br>
+            <br>
+            <img src="pictures/IMG_0262.jpg" width = 25%>
+            <br>
+            <br>
+            <img src="pictures/IMG_0263.jpg" width = 25%>
+            <br>
+            <br>
+            <img src="pictures/IMG_0264.jpg" width = 25%>
+            <br>
+            This solution was definitley low-profile enough.  
+            <br>
+            <img src="pictures/IMG_0265.jpg" width = 25%>
+            <br>
+            In this picture, the belt can be seen being attached to the second or shoulder joint, after holes were drilled and tapped in it. 
+            <br>
+            <img src="pictures/65896326198__7FA07659-6336-4D7C-990E-FC2F46BABC47.jpg" width = 25%>
+            <br>
+            
+            <br>
+            And this is where we are now. Plans are in place to design better mounts for the potentiometers, and perhaps 3D print or CNC mill them. From there, all that will be needed
+            <br> is to retune the PID loops and add more features!
+
+       </p>
+
+
+
+
+
+
+    </center>
+
+
+
+
+
+
+  </body>
+</html>
