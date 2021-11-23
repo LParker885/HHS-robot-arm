@@ -1,11 +1,13 @@
 # ---- Note -----
 Readme is in progress, as is the rest of the repository, and so might not be updated with the latest about where code is and what folders are.
-Being thusly warned, here is the somewhat current readme, which should be taken more as guidelines than a Pirate's Code of Honor. 
+Being so warned, here is the somewhat current readme:
 
 
 
 
 # Robot arm!
+Website: https://lparker885.github.io/HHS-robot-arm/
+
 This code is for the robot arm at HHS. 
 It has a few folders: maintenence, supersimpledemos, and networked-demos. 
 
