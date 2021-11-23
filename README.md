@@ -1,6 +1,6 @@
 # ---- Note -----
 Readme is in progress, as is the rest of the repository, and so might not be updated with the latest about where code is and what folders are.
-Being so warned, here is the somewhat current readme:
+Being so warned, here is the somewhat current readme, designed to be quickly read by a student in a computer science class so that they can get right on with making the robot arm do whatever they want it to:
 
 
 
