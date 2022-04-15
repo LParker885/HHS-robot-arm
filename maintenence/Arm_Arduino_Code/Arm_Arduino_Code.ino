@@ -1,5 +1,4 @@
-// this is the definitley not current code that will be uploaded to the arduino micro which is running the whole show. It takes serail data from the Raspberry Pi, in such a way as to not slow down the PID loops, and then
-// parses it so that it can tell where it needs to go. Better code coming soon, with a removal of the smoothed library and the real PID tunings. 
+
 
 #include <PID_v1.h>  //PID loop from http://playground.arduino.cc/Code/PIDLibrary
 #include <Servo.h>
@@ -16,11 +15,14 @@ Smoothed <float> sm5;
 Smoothed <float> *smP[] ={&sm1,&sm2,&sm3,&sm4,&sm5};
 
 //PID tuning variables (in arrays of course for iteration)
-double Pk[] = {0.1, 0.0, 0.0, 0.0,0.0};
-double Ik[] = {0, 0, 0, 0, 0};
-double Dk[] = {0, 0, 0, 0, 0};
-
-
+/*
+double Pk[] = {15, 15, 15 , 0,2};
+double Ik[] = {2.5, 2,  3,   0,   0};
+double Dk[] =- {.5,0.5, 0.5,  0,  0};
+*/
+double Pk[] = {10, 5, 15 , 10,7};
+double Ik[] = {0.5, 0,  0,   4,   0.5};
+double Dk[] = {0.2,0.0, 0.1,  0,  0.5};
 
 //PID input/output variable arrays
 double Setpoint[5];
@@ -49,14 +51,16 @@ byte timeout = 0;
 
 //arrays for pin values
 const byte pinPOT[] = {A0, A1, A2, A3, A4}; //analog inputs that the feedback potentiometers are attached to
-const byte pinPWM[] = {13, 5, 6, 9, 11}; //PWM pins that the speed channel of motor control are attached to
-const byte pinDIR[] = {14, 4, 7, 8, 12}; //non-PWM pins that the direction channel of motor control are attached to
-const byte pinHAND[] = {2, 3, 16}; //pins the hand servo channels are attached to
+const byte pinPWM[] = {5, 6, 9, 10, 11}; //PWM pins that the speed channel of motor control are attached to
+const byte pinDIR[] = {4, 7, 8, 12, 16}; //non-PWM pins that the direction channel of motor control are attached to
+const byte pinHAND[] = {2, 3, 15}; //pins the hand servo channels are attached to
 const byte pinEstop = 17;
 
 
-const int top[] = {1000,1000,759,1000,850};
-const int bottom[] = {125,480,399,266,308};
+const int top[] = {980,990,490,960,1000};
+const int bottom[] = {70,500,30,120,380};
+const int angMin[] = {0,0, 0,  0, 0};
+const int angMax[] = {180,180,180,180,180};
 
 
 void setup() {
@@ -69,13 +73,22 @@ void setup() {
     PidP[motorNumber]->SetMode(AUTOMATIC);
     PidP[motorNumber]->SetOutputLimits(-255, 255); //set the output limits to -255 to 255 for arduino's analogWrite, with a negative for direction
     PidP[motorNumber]->SetSampleTime(20);
-    smP[motorNumber]->begin(SMOOTHED_AVERAGE, 15);
+    smP[motorNumber]->begin(SMOOTHED_AVERAGE, 30);
   }
 
 hand1.attach(pinHAND[2]);
-  
+  for (byte i = 0; i < 2; i++) {
+      analogWrite(pinPWM[i], 255);
+      digitalWrite(pinDIR[i], LOW);
+      
+    }
+    for (byte i = 2; i < 5; i++) {
+      analogWrite(pinPWM[i], 0);
+      digitalWrite(pinDIR[i], LOW);
+      
+    }
 
-  Serial.begin(1000000); //start up the serial communication through the onboard USB port to talk to the Raspberry Pi or whatever else
+  Serial.begin(9600); //start up the serial communication through the onboard USB port to talk to the Raspberry Pi or whatever else
   while (!Serial.available()) {
 
     delay(10);
@@ -88,15 +101,16 @@ hand1.attach(pinHAND[2]);
 
 void loop() {
   getSerial();
-  if (pos[8] == 1) { //check that the motor-enable value has been set to 1, it's default is 0.
+  if (pos[8] == 1 &&  analogRead(pinPOT[1]) != 0 ) { //check that the motor-enable value has been set to 1, it's default is 0.
 
    // digitalWrite(pinEstop, HIGH);
 
-for(int motorNumber = 0; motorNumber < 5; motorNumber++){
+for(int motorNumber = 0; motorNumber <5; motorNumber++){
 
       pot[motorNumber] = analogRead(pinPOT[motorNumber]);               //get the inputs for the PID controller and run Compute() to put the output in Output[]
-
-      Setpoint[motorNumber] = map(pos[motorNumber], 0, pos[10], -255, 255);
+       
+      
+      Setpoint[motorNumber] = map(max(angMin[motorNumber],min(pos[motorNumber],angMax[motorNumber])), angMin[motorNumber], angMax[motorNumber], -255, 255);
       
       smP[motorNumber]->add(map(pot[motorNumber], bottom[motorNumber], top[motorNumber], -255, 255));
       Input[motorNumber] = smP[motorNumber]->get();
@@ -104,30 +118,50 @@ for(int motorNumber = 0; motorNumber < 5; motorNumber++){
 
 
 
- 
+     
+       
       if (Output[motorNumber] > 0) {                    //these if statements account for forward and reverse without a second variable
-        analogWrite(pinPWM[motorNumber], Output[motorNumber]);
-        digitalWrite(pinDIR[motorNumber], LOW);
+       
+       if (motorNumber == 0 || motorNumber == 1 ) {
+         
+          analogWrite(pinPWM[motorNumber], 255 - abs(Output[motorNumber]));   //flip-flop the pwm signal, because the direction is now HIGH and the difference should still be the same
+          digitalWrite(pinDIR[motorNumber], HIGH);
+  
+        } else {
+          analogWrite(pinPWM[motorNumber], abs(Output[motorNumber])); 
+          digitalWrite(pinDIR[motorNumber], HIGH);
+        }
+     
        
       }
       else if (Output[motorNumber] <= 0) {
-        if (motorNumber != 0 && motorNumber != 1) {
-          analogWrite(pinPWM[motorNumber], 255 - (abs(Output[motorNumber])));   //flip-flop the pwm signal, because the direction is now HIGH and the difference should still be the same
+        if (motorNumber == 0 || motorNumber == 1 ) {
+          analogWrite(pinPWM[motorNumber], 255 - (abs(Output[motorNumber])));   
           digitalWrite(pinDIR[motorNumber], LOW);
         } else {
-          analogWrite(pinPWM[motorNumber], abs(Output[motorNumber])); //because the turret motor is run off of a different motor driver chip that does not need flippy-floppy PWM
-          digitalWrite(pinDIR[motorNumber], HIGH);
+          analogWrite(pinPWM[motorNumber], abs(Output[motorNumber]));
+          digitalWrite(pinDIR[motorNumber], LOW);
         }
       }
-     
-    }
+
+    
  
      
       hand1.write(pos[5]); 
+  
+  
+  
+}
   }
-else if (pos[8] == 0) {
+  else if (pos[8] == 0 ||  analogRead(pinPOT[1]) == 0) {
    // digitalWrite(pinEstop, LOW);
-    for (byte i = 0; i < 5; i++) {
+   pos[8] = 0;
+   for (byte i = 0; i < 2; i++) {
+      analogWrite(pinPWM[i], 255);
+      digitalWrite(pinDIR[i], LOW);
+      
+    }
+    for (byte i = 2; i < 5; i++) {
       analogWrite(pinPWM[i], 0);
       digitalWrite(pinDIR[i], LOW);
       
@@ -135,6 +169,7 @@ else if (pos[8] == 0) {
  
 
   }
+
 }
 
 

@@ -1,108 +1,114 @@
-// a simple arduino sketch to make sure that a particular motor controller is functioning properly. Or rather, to figure out what the motor controller is doing when the arduino thinks that it is functioning properly. 
+
+
+int pinp = 11;
+int pind = 16;
+
 
 void setup(){
- pinMode(13,OUTPUT);
- pinMode(14,OUTPUT);
+ pinMode(pinp,OUTPUT);
+ pinMode(pind,OUTPUT);
   Serial.begin(9600);
 }
 
 void loop(){
+  while(!Serial.available()){
+  }
   
   Serial.println("LOW, Increasing");
-  digitalWrite(14,LOW);
+  digitalWrite(pind,LOW);
   for(int i = 0; i<256; i+= 10){
-   analogWrite(13,i); 
+   analogWrite(pinp,i); 
    delay(100);
   }
   Serial.println("LOW, Decreasing");
   for(int i = 255; i>=0; i-= 10){
-   analogWrite(13,i); 
+   analogWrite(pinp,i); 
    delay(100);
   }
   delay(1000);
   Serial.println("HIGH, Increasing");
-  digitalWrite(14,HIGH);
+  digitalWrite(pind,HIGH);
   for(int i = 0; i<256; i+= 10){
-   analogWrite(13,i); 
+   analogWrite(pinp,i); 
    delay(100);
   }
   Serial.println("HIGH, Decreasing");
   for(int i = 255; i>=0; i-= 10){
-   analogWrite(13,i); 
+   analogWrite(pinp,i); 
    delay(100);
   }
   delay(1000);
   
   
   Serial.println("HIGH, 0");
-  analogWrite(13,0);
-  digitalWrite(14,HIGH);
+  analogWrite(pinp,0);
+  digitalWrite(pind,HIGH);
   delay(1000);
   
   Serial.println("LOW, 0");
   analogWrite(13,0);
-  digitalWrite(14,LOW);
+  digitalWrite(pind,LOW);
   delay(1000);
   
   Serial.println("HIGH, 255");
-  analogWrite(13,255);
-  digitalWrite(14,HIGH);
+  analogWrite(pinp,255);
+  digitalWrite(pind,HIGH);
   delay(1000);
   
   Serial.println("LOW, 255");
-  analogWrite(13,255);
-  digitalWrite(14,LOW);
+  analogWrite(pinp,255);
+  digitalWrite(pind,LOW);
   delay(1000);
   
   
    Serial.println("HIGH, 10");
-  analogWrite(13,10);
-  digitalWrite(14,HIGH);
+  analogWrite(pinp,10);
+  digitalWrite(pind,HIGH);
   delay(1000);
   
   Serial.println("LOW, 10");
-  analogWrite(13,10);
-  digitalWrite(14,LOW);
+  analogWrite(pinp,10);
+  digitalWrite(pind,LOW);
   delay(1000);
   
   Serial.println("HIGH, 245");
-  analogWrite(13,245);
-  digitalWrite(14,HIGH);
+  analogWrite(pinp,245);
+  digitalWrite(pind,HIGH);
   delay(1000);
   
   Serial.println("LOW, 245");
-  analogWrite(13,245);
-  digitalWrite(14,LOW);
+  analogWrite(pinp,245);
+  digitalWrite(pind,LOW);
   delay(1000);
   
      Serial.println("HIGH, 1");
-  analogWrite(13,1);
-  digitalWrite(14,HIGH);
+  analogWrite(pinp,1);
+  digitalWrite(pind,HIGH);
   delay(1000);
   
   Serial.println("LOW, 1");
-  analogWrite(13,1);
-  digitalWrite(14,LOW);
+  analogWrite(pinp,1);
+  digitalWrite(pind,LOW);
   delay(1000);
  
    Serial.println("HIGH, 128");
-  analogWrite(13,128);
-  digitalWrite(14,HIGH);
+  analogWrite(pinp,128);
+  digitalWrite(pind,HIGH);
   delay(1000);
   
   Serial.println("LOW, 128");
-  analogWrite(13,128);
-  digitalWrite(14,LOW);
+  analogWrite(pinp,128);
+  digitalWrite(pind,LOW);
   delay(1000);
  
   Serial.println("HIGH, 254");
-  analogWrite(13,254);
-  digitalWrite(14,HIGH);
+  analogWrite(pinp,254);
+  digitalWrite(pind,HIGH);
   delay(1000);
   
   Serial.println("LOW, 254");
-  analogWrite(13,254);
-  digitalWrite(14,LOW);
+  analogWrite(pinp,254);
+  digitalWrite(pind,LOW);
   delay(1000);
   
 }
