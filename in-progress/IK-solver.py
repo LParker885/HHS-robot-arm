@@ -11,12 +11,13 @@ def solveIK(x,y,z,hand_angle):
     r=math.sqrt((x**2)+(z**2))
     y=y-(jls[3]*math.sin(hand_angle))
     x=x-(jls[3]*math.cos(hand_angle))
-    
+
     d=math.sqrt(((y-jls[0])**2)+(r**2))
     
     angs[1] = 360*((math.acos((jls[1]**2)+(d**2)-(jls[2]**2)/(2*jls[1]*d))+math.atan((y-jls[0])/r))/(2*math.pi))
     angs[2] = 360*(((math.pi/2)+((math.pi)-math.acos((jls[1]**2)+(jls[2]**2)-(d**2)/(2*jls[1]*jls[2]))))/(2*math.pi))
     
+    angs[3] = (180-angs[1]-(angs[2]-90))+hand_angle
 
 
 
