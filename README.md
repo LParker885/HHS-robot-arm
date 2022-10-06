@@ -1,3 +1,8 @@
+
+!!! ALL OF THIS CODE WILL SOON BE MIGRATED TO A DOCUMENTATION SUBDIRECTORY WITHIN THE LARGER PYTHON LIBRARY UNDER DEVELOPMENT NOW !!!
+(What this means is that what is here right now will be used to make a python library for easy installation and use, and will become legacy code/examples)
+
+
 # ---- Note -----
 Readme is in progress, as is the rest of the repository, and so might not be updated with the latest about where code is and what folders are.
 Being so warned, here is the somewhat current readme, designed to be quickly read by a student in a computer science class so that they can get right on with making the robot arm do whatever they want it to:
