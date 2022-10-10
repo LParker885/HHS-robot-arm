@@ -2,8 +2,13 @@
 import serial
 import time
 
-data = [90,70,90,90,90,90,90,90,0,0,180] #j1,j2,j3,j4,j5,h1,h2,h3,moveEnable,fast,res
-#                                            0 1  2  3  4  5  6  7  8            9   10
+
+
+
+
+
+data = [90,90,90,90,90,90,90,90,0,0,180] #j1,j2,j3,j4,j5,h1,h2,h3,moveEnable,fast,res
+#                                          0 1  2  3  4  5  6  7  8            9   10
 ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
 dataIn = ser.readline().decode('utf-8').rstrip()
 while dataIn != 'A':
@@ -21,6 +26,8 @@ def getInput(data):
     temp=data.split(',')
     pos = temp[0]
     val = temp[1]
+    if pos == 1:
+        val = (180-((val+40)/(180+40))*180)
     changeVals(int(pos),float(val))
 
 

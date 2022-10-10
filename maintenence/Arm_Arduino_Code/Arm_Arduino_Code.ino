@@ -16,13 +16,13 @@ Smoothed <float> *smP[] ={&sm1,&sm2,&sm3,&sm4,&sm5};
 
 //PID tuning variables (in arrays of course for iteration)
 /*
-double Pk[] = {15, 15, 15 , 0,2};
-double Ik[] = {2.5, 2,  3,   0,   0};
-double Dk[] =- {.5,0.5, 0.5,  0,  0};
+double Pk[] = {15, 15, 15 , 12.5,2};
+double Ik[] = {2.5, 2,  3,   4,   0};
+double Dk[] =- {.5,0.5, 0.5, .25,  0};
 */
-double Pk[] = {10, 5, 15 , 10,7};
-double Ik[] = {0.5, 0,  0,   4,   0.5};
-double Dk[] = {0.2,0.0, 0.1,  0,  0.5};
+double Pk[] = {10, 5,6 , 5, 2};
+double Ik[] = {1,   0,  0,     0,    0};
+double Dk[] = {0,0.0, 0,  0,  0};
 
 //PID input/output variable arrays
 double Setpoint[5];
@@ -39,7 +39,8 @@ PID *PidP[] = {&PID1, &PID2, &PID3, &PID4, &PID5}; //pointer array to allowe eac
 
 //servo objects for the servo channels going to the end effector
 Servo hand1;
-
+Servo hand2;
+Servo hand3;
 //array to hold analog readings
 int pot[] = {0, 0, 0, 0, 0};
 
@@ -51,14 +52,14 @@ byte timeout = 0;
 
 //arrays for pin values
 const byte pinPOT[] = {A0, A1, A2, A3, A4}; //analog inputs that the feedback potentiometers are attached to
-const byte pinPWM[] = {5, 6, 9, 10, 11}; //PWM pins that the speed channel of motor control are attached to
-const byte pinDIR[] = {4, 7, 8, 12, 16}; //non-PWM pins that the direction channel of motor control are attached to
-const byte pinHAND[] = {2, 3, 15}; //pins the hand servo channels are attached to
+const byte pinPWM[] = {5, 6, 13, 3, 11}; //PWM pins that the speed channel of motor control are attached to
+const byte pinDIR[] = {4, 7, 15, 12, 16}; //non-PWM pins that the direction channel of motor control are attached to
+const byte pinHAND[] = {2, 10, 9}; //pins the hand servo channels are attached to
 const byte pinEstop = 17;
 
 
-const int top[] = {980,990,490,960,1000};
-const int bottom[] = {70,500,30,120,380};
+const int top[] = {980,600,490,1000,650};
+const int bottom[] = {70,265,30,45,350};
 const int angMin[] = {0,0, 0,  0, 0};
 const int angMax[] = {180,180,180,180,180};
 
@@ -73,10 +74,16 @@ void setup() {
     PidP[motorNumber]->SetMode(AUTOMATIC);
     PidP[motorNumber]->SetOutputLimits(-255, 255); //set the output limits to -255 to 255 for arduino's analogWrite, with a negative for direction
     PidP[motorNumber]->SetSampleTime(20);
+    if(motorNumber != 3){
     smP[motorNumber]->begin(SMOOTHED_AVERAGE, 30);
+    } else if (motorNumber == 3){
+      smP[motorNumber]->begin(SMOOTHED_AVERAGE, 2);
+    }
   }
 
-hand1.attach(pinHAND[2]);
+hand1.attach(pinHAND[0]);
+hand2.attach(pinHAND[1]);
+hand3.attach(pinHAND[2]);
   for (byte i = 0; i < 2; i++) {
       analogWrite(pinPWM[i], 255);
       digitalWrite(pinDIR[i], LOW);
@@ -88,7 +95,7 @@ hand1.attach(pinHAND[2]);
       
     }
 
-  Serial.begin(9600); //start up the serial communication through the onboard USB port to talk to the Raspberry Pi or whatever else
+  Serial.begin(115200); //start up the serial communication through the onboard USB port to talk to the Raspberry Pi or whatever else
   while (!Serial.available()) {
 
     delay(10);
@@ -100,12 +107,14 @@ hand1.attach(pinHAND[2]);
 
 
 void loop() {
+  
   getSerial();
+  
   if (pos[8] == 1 &&  analogRead(pinPOT[1]) != 0 ) { //check that the motor-enable value has been set to 1, it's default is 0.
 
    // digitalWrite(pinEstop, HIGH);
 
-for(int motorNumber = 0; motorNumber <5; motorNumber++){
+for(int motorNumber = 0; motorNumber < 5; motorNumber++){
 
       pot[motorNumber] = analogRead(pinPOT[motorNumber]);               //get the inputs for the PID controller and run Compute() to put the output in Output[]
        
@@ -115,7 +124,6 @@ for(int motorNumber = 0; motorNumber <5; motorNumber++){
       smP[motorNumber]->add(map(pot[motorNumber], bottom[motorNumber], top[motorNumber], -255, 255));
       Input[motorNumber] = smP[motorNumber]->get();
       PidP[motorNumber]->Compute(); // uses the -> operater instead of the . operater because PidP is a pointer, not the actual object
-
 
 
      
@@ -144,17 +152,19 @@ for(int motorNumber = 0; motorNumber <5; motorNumber++){
         }
       }
 
-    
+ 
  
      
-      hand1.write(pos[5]); 
-  
+     
   
   
 }
+ 
   }
+     
   else if (pos[8] == 0 ||  analogRead(pinPOT[1]) == 0) {
    // digitalWrite(pinEstop, LOW);
+  
    pos[8] = 0;
    for (byte i = 0; i < 2; i++) {
       analogWrite(pinPWM[i], 255);
@@ -193,7 +203,7 @@ void getSerial() {
     int stringStart = 0;
     int arrayIndex = 0;
     for (int i = 0; i < rxString.length(); i++) {
-      //Get character and check if it's our "special" character.
+      //Get character and check if it's our separator character.
       if (rxString.charAt(i) == ',') {
         //Clear previous values from array.
         strArr[arrayIndex] = "";
@@ -208,5 +218,8 @@ void getSerial() {
       }
     }
   }
+  hand1.write(pos[5]); 
+  hand2.write(pos[6]); 
+  hand3.write(pos[7]); 
 
 }
