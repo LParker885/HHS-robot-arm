@@ -56,11 +56,13 @@
         }
 
     </style>
+    <--! If you are reading this, sorry for the bad HTML. -->
 </head>
-
+    
   <body>
     <center><h1 id="headertext">Timeline!</h1></center>
     <center><p>This page is the timeline - with pictures - of how development has happened for the robot arm. <br>
+         <div> Sorry in advance for how long some of the pictures will take to load - but they are worth it! </div>
       
     </p>
 
@@ -299,14 +301,24 @@
             <br>
             That was pretty much all that was able to be completed before the end of the semester, but there is (finally) a video of the robot moving on its own, 
             through a series of set positions on each joint. No motion smoothing or inverse kinematics had been done yet, so it is somewhat jerky and only moves one joint 
-            at a time, but it finally does move to where it is supposed to! The video cuts off before joints 3-5 can be seen, but they go through the same procedure.
-            Hopefully a video of that will be up once fall semester starts and the lab is open again. 
+            at a time, but it finally does move to where it is supposed to! The video cuts off before joints 3-5 can be seen, but they go through the same procedure flawlessly.
             <br>
             <br>
             
             <a href="https://youtu.be/zbwud1Ft9Ugg">Video of first two joints!</a>
+    
             <br>
-
+            <br>
+            <h2> September 2022 </h2>
+            <br>
+    
+            More tuning and API development was done, and the arm is fully functional, if somewhat cumbersome to code for. 
+            A program to pick up and continuously rearrange three small acrylic cubes was put together, to demonstrate simple interpolation and position cycling. 
+            <a href="https://youtu.be/ua5yBn6vCyA"> Video of this program is here! </a>
+            <br>
+            All that is left to do is to migrate all of the exisiting code into a single Python library, so that students can pip install it and be off and running with
+            a few simple lines of code to initalize the arm. 
+            WOO!
 
 
        </p>

@@ -7,16 +7,22 @@ import network
 import serial
 import time
 import math
+import tinyik
+import numpy as np
+
 
 data = [90,90,90,90,90,90,90,90,0,0,360] #j1,j2,j3,j4,j5,h1,h2,h3,moveEnable,fast,resolution
 
-stillConnected = 1
+stillConnected = True
 
 baseHeight = 24
 joint1Length = 24
 joint2Length = 24
-handLength = 9
+wristlength = 6
+handLength = 8
 
+
+arm = tinyik.Actuator(['y',[baseHeight,.0,.0],'z',[joint1Length, .0, .0], 'z',[joint2Length, .0, .0], 'z', [wristlength,.0,.0],'x',[handLength,.0,.0]])
 
 
 
@@ -32,24 +38,21 @@ while dataIn != 'A':
 def getNet(data):
     print(data)
     temp=data.split(',')
-    r = temp[0]
-    x = temp[1]
-    y = temp[2]
-    ha1 = temp[3]
-    ha2 = temp[4]
-    joint1 = r
-    joint3 = (math.acos(((joint1Length**2)+(joint2Length**2))-(math.sqrt((x**2)+((y-baseHeight)**2))/(2*joint2Length*joint1Length))/2
-    joint2 = ((math.acos(((joint1Length**2)+(math.sqrt((x**2)+((y-baseHeight)**2)-(joint2Length**2)))/(2*joint2Length*joint1Length))+(math.acos((y-baseHeight)/x)))/2
-    
-    #joint1 = r
-    #joint3 = (cos⁻¹((joint1length²+joint2length²)-(sqrt(x²+(y-baseHeight)²))/(2*joint2length*joint1length))/2 (/2 for 360 res cuz 0-360=0-180)
-    #joint2 = ((cos⁻¹((joint1length²+sqrt(x²+(y-baseHeight)²))-(joint2length²)/(2*joint2length*joint1length))+(cos⁻¹((y-baseHeight)/x)))/2 (/2 for 360 res, cuz 0-360=0-180)
-    
-    #data[0] = joint1
-    #data[1] = joint2
-    #data[2] = joint3
-    data[3] = ha1*2 #?
-    data[4] = ha2
+    x = temp[0]
+    y = temp[1]
+    z = temp[2]
+    data[5] = temp[3] #hand1
+    data[6] = temp[4] #hand2
+    arm.ee = [x,y,z]
+    data[0] = np.rad2deg(arm.angles)[0] #base
+    data[1] = np.rad2deg(arm.angles)[1] #shoulder
+    data[2] = np.rad2deg(arm.angles)[2] #elbow
+    data[3] = np.rad2deg(arm.angles)[3] #wrist
+    data[4] = np.rad2deg(arm.angles)[4] #wristspinny
+
+
+   
+   
 
 network.wait(whenHearCall=getNet)
 
