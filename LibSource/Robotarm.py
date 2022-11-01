@@ -12,8 +12,6 @@ class Robot:
         network.call(self.ip)
         self.jointdata = [90,90,90,90,90,110]
 
-
-
     def __str__(self):
         return self.jointdata
     
