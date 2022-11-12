@@ -1,8 +1,7 @@
 #sweep test!
-import network
+from RobotArm import network
 import math
 import time
-
 
 class Robot:
     

@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: HHS-Robotarm
-Version: 0.0.1
+Version: 0.0.1.8
 Summary: A Python package for interfacing with the HHS robot arm
 Author-email: Luke Parker <luke.parker885@gmail.com>
 Project-URL: Homepage, https://github.com/LParker885/HHS-Robot-Arm

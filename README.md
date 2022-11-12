@@ -1,6 +1,20 @@
 
-!!! ALL OF THIS CODE WILL SOON BE MIGRATED TO A DOCUMENTATION SUBDIRECTORY WITHIN THE LARGER PYTHON LIBRARY UNDER DEVELOPMENT NOW !!!
-(What this means is that what is here right now will be used to make a python library for easy installation and use, and will become legacy code/examples)
+
+# ------- HOW TO INSTALL AND USE! --------------
+
+run this to install:
+    pip install HHS-Robotarm
+
+simple demo program:
+
+from RobotArm import Robotarm
+arm = Robotarm.Robot()
+
+print(arm)
+#should return an array looking like this: "[90,90,90,90,90,90,110]"
+
+arm.interpolate([110,110,90,90,90,90,90],20,3)
+#should move the arm and the hand slowly
 
 
 # ---- Note -----

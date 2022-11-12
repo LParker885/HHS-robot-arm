@@ -1,6 +1,6 @@
 # network.py  2013 @whaleygeek
 
-# this is what lets the chat and sweeptest programs be so simple
+# this is what lets communication programs be so simple
 
 try:
   import thread
