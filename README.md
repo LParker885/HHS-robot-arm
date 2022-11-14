@@ -1,4 +1,8 @@
 
+# ---- Note -----
+Readme is in progress, as is the rest of the repository, and so might not be updated with the latest about where code is and what folders are.
+Being so warned, here is the somewhat current readme, designed to be quickly read by a student in a computer science class so that they can get right on with making the robot arm do whatever they want it to:
+
 
 # ------- HOW TO INSTALL AND USE! --------------
 
@@ -17,12 +21,8 @@ arm.interpolate([110,110,90,90,90,90,90],20,3)
 #should move the arm and the hand slowly
 
 
-# ---- Note -----
-Readme is in progress, as is the rest of the repository, and so might not be updated with the latest about where code is and what folders are.
-Being so warned, here is the somewhat current readme, designed to be quickly read by a student in a computer science class so that they can get right on with making the robot arm do whatever they want it to:
 
-
-
+#----------ignore this stuff its old -----
 
 # Robot arm!
 Website: https://lparker885.github.io/HHS-robot-arm/
