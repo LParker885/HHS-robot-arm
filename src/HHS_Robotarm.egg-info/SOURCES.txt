@@ -1,6 +1,8 @@
+LICENCE
 MANIFEST.in
 README.md
 pyproject.toml
+src/Readme.md.txt
 src/HHS_Robotarm.egg-info/PKG-INFO
 src/HHS_Robotarm.egg-info/SOURCES.txt
 src/HHS_Robotarm.egg-info/dependency_links.txt
