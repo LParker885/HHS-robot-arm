@@ -34,7 +34,7 @@ class Robot:
 
             time.sleep(timego/steps)
         for pos in range(0,6):
-            self.jointdpyata[pos] = newData[pos]
+            self.jointdata[pos] = newData[pos]
         self.sayNet()    
         return True
 
