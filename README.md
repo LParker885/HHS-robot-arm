@@ -11,7 +11,7 @@ Being so warned, here is the somewhat current readme, designed to be quickly rea
 run this to install the python package:
     pip install HHS-Robotarm
 
-Instructions for turning the robot arm are coming soon! there's a lot of switches!
+Instructions for turning the robot arm on are coming soon! there's a lot of switches!
 
 # simple demo program:
 
