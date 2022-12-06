@@ -1,4 +1,5 @@
 import RobotArm
+from RobotArm import network
 import math
 import time
 
@@ -7,7 +8,7 @@ class Robot:
 
     def __init__(self):
         self.ip = "169.254.126.87"
-        RobotArm.network.call(self.ip)
+        network.call(self.ip)
         self.jointdata = [90,90,90,90,90,110]
 
     def __str__(self):
@@ -15,7 +16,7 @@ class Robot:
     
     def sayNet(self):
         for i in range(0,6):
-            RobotArm.network.say("{0},{1}".format(i,self.jointdata[i]))
+            network.say("{0},{1}".format(i,self.jointdata[i]))
             print("{0},{1}".format(i,self.jointdata[i]))
         return True
         
@@ -38,11 +39,11 @@ class Robot:
         return True
 
     def go(self):
-        RobotArm.network.say("8,1")
+        network.say("8,1")
         return True
 
     def stop(self):
-        RobotArm.network.say("8,0")
+        network.say("8,0")
         return True
 
     def runArray(self,array,time):
