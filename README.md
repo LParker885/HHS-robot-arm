@@ -8,10 +8,9 @@ Being so warned, here is the somewhat current readme, designed to be quickly rea
 
 # ------- HOW TO INSTALL AND USE! --------------
 
-run this to install the python package:
-    pip install HHS-Robotarm
+Goto the tutorials page:   https://lparker885.github.io/HHS-robot-arm/website/tutorials.html
 
-Instructions for turning the robot arm on are coming soon! there's a lot of switches!
+Follow the instructions! :)
 
 # simple demo program:
 
