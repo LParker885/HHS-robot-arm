@@ -27,7 +27,7 @@ arm.interpolate([110,110,90,90,90,110,90],20,3)
 arm.stop()
 #arm should stop whirring
 
-# more less simple API explanation
+# more (less simple) API explanation
 Robot() creates a new robot object. Upon calling, it will connect to the robot arm via ethernet, so please don't try to set up the robot arm object before connecting the two pis and verifying that the network connected with ifconfig. (type ifconfig in the terminal, the eth0 interface should be connected).
 This object will return its joint data array when the __str__ function is called. Sorry. But I'll probably not fix that. 
 
