@@ -1,11 +1,11 @@
 
-# ------ Website: https://lparker885.github.io/HHS-robot-arm/ -----
+#  Website: https://lparker885.github.io/HHS-robot-arm/ 
 
 
 
 # ------- HOW TO INSTALL AND USE! --------------
 
-Goto the tutorials page on the website, it has the best explaination:   https://lparker885.github.io/HHS-robot-arm/website/tutorials.html
+Go to the tutorials page on the website, it has the best explaination:   https://lparker885.github.io/HHS-robot-arm/website/tutorials.html
 
 Follow the instructions! :)
 
