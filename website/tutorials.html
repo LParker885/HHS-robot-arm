@@ -60,36 +60,43 @@
 </head>
 <body>
   <center><h1 id="headertext">Tutorials!</h1></center>
-  <center><p>This page has all the tutorials you might need to use the robot arm, from turning it on to picking up blocks.
-    Anything cooler than that will be entirely your own creative prowess! <br>
+  <center><p>This page has the tutorial you might need to use the robot arm, from turning it on to picking up blocks. Armed with this knowledge, you can unleash your creative prowess!
+    A drawing program? A sandwich maker? A lego-assembler? Anything is possible! <br>
     
     
-  </p>
+  </p> </center>
 
   <p><a href="/HHS-robot-arm">Back to homepage</a></p>
  
-    <center id="storytime">
+    <div id="storytime">
     <p>
-            <h2>Raspberry Pi setup</h2>
+           <center> <h2>Raspberry Pi setup</h2> </center>
       To set up your Raspberry Pi so that it can communicate with the robot arm, you will need to follow a few steps. 
       <ol>
 <li>
   Go to the Raspberry Pi setup application and under interfaces, turn on SSH. 
 </li>
+<br>
 <li>
   Open a new terminal window and run the following:  pip3 install HHS-Robotarm
   It should install without any errors.
 </li>
+<br>
 <li>
-make sure that you have a python IDE installed. If you don't or don't know if there is one, I reccomend mu: run the following in a new terminal:
+Make sure that you have a python IDE installed. If you don't or don't know if there is one, I reccomend mu - run the following in a new terminal: <br>
 sudo apt-get install mu-editor
+<br>
 It should show up in the menu under "programming"
 </li>
+<br>
 <li>
   Double check the python package intallation: open up your python IDE and create a new file with these lines:
-   from RobotArm import Robotarm
-   arm = Robotarm.Robot()
-   if there is a "connection not found" error, everything went well. 
+  <br>
+  from RobotArm import Robotarm
+   
+  arm = Robotarm.Robot()
+  <br>
+   If there is a "connection not found" error after a bit, everything went well (as long as no errors show up immediatley, everything should be fine). 
 </li>
       </ol>
       With that, your pi should be all set up and happy!
@@ -98,64 +105,77 @@ It should show up in the menu under "programming"
 
 <br>
 <p>
+  <center>
 <h2>Turning on the arm!</h2>
-There are a lot of switches on the robot arm. Please do not just randomly flick them, it could break things. 
+</center>
+There are a lot of switches on the robot arm. Be aware that in order to not break the arm, they must be flipped in a specific sequence. 
 <br>
-With that warning out of the way, here are the switches to flick and when to flick them:
-Here is the switch panel from left to right:
-Main disconnect - RPi power - Arduino power - Motor Power
-Above motor power is a button for resetting the Arduino. It is in development. 
+With that warning out of the way, here are the switches to flick and when to flick them, from left to right along the switch panel:
+<br>
+<h3>
+Main disconnect <b>-</b> RPi power <b>-</b> Arduino power <b>-</b> Motor power
+</h3>
+
 Mounted to the top of the chassis is an E-Stop button, for when things go wrong - 
 Hitting it will stop all motion and disconnect motor controller power. 
-
-To get started, connect the power cable to the socket and <b>only</b> turn on the main power switch and the RPi power switch. 
+<br>
+<br>
+<br>
+To get started, connect the power cable to the socket and<strong> <strong>only</strong> </strong>turn on the main power switch and the RPi power switch. 
 This will give power to the raspberry pi mounted inside of the robot arm. 
-
-Next, take the ethernet cable from inside the chassis and connect the free end of it to your raspberry pi. Make sure you turn of wifi on the pi. 
-You shold see two little arrows down in the corner of your screen flash and after ~30 seconds turn solid blue. This means that the ethernet is connected 
+<br>
+Next, take the ethernet cable from inside the chassis and connect the free end of it to your Raspberry Pi's ethernet jack. Make sure wifi is turned off on your Pi.
+<br>
+You shold see two little arrows in the corner of your screen flash and after ~30 seconds turn solid blue. This means that the ethernet is connected 
 to the pi in the chassis. 
-
+<br>
+<br>
 Open up a new terminal window and type the following to open up a terminal on the pi inside the arm: ssh pi@169.254.126.87
-It will prompt you for a password, that password is "eagles"
-
+<br>
+It will prompt you for a password, which is "eagles"
+<br>
+<h4>
 Congratulations! you have successfuly powered on the arm. 
-
+</h4>
 </p>
 <p>
-<h2>First movements!</h2>
-Now that you are connected to the robot arm, you probably want it to go zip. Here's how.
+  <center>
+<h2>First movements!</h2></center>
 
-In your python editor of choice on your raspberry pi, type the following code:
-from RobotArm import Robotarm
-arm = Robotarm.Robot()
-arm.go()
-arm.interpolate([110,90,90,90,90,90,90],20,3)
-arm.stop()
-
-
-save it, then make sure you have a terminal window open that is ssh-ed into the robot arm. 
-First, turn on the switch for arduino power and reset the e-stop switch, if necessary. 
-then, in that window, type the following: ./robot.sh 
-after a few seconds, the letter "A" should appear. 
-This is your acknowledgement that the arm is connected. 
-You can now turn on the motor power switch. 
-
-Run the program you just typed in your python IDE, and the arm should scoot!
-YAY!
-
-now, to turn it off, flip both the motor power and arduino power switches to off. 
-run the command in the ssh terminal: sudo shutdown now
-wait 15 seconds, and flip the main power and RPi power switches to off. 
-then, shut down your pi and give the robot arm a high-five. 
+Now that you are connected to the robot arm, you probably want it to go zip! Here's how:<br>
+<br>
+In your python editor of choice on your raspberry pi, type the following code:<br>
+from RobotArm import Robotarm<br>
+arm = Robotarm.Robot()<br>
+arm.go()<br>
+arm.interpolate([110,90,90,90,90,90,90],20,3)<br>
+arm.stop()<br>
+<br>
+<br>
+<h4>Pay attention to this bit - it is the procedure you have to follow each time you want to run a program!</h4>
+Save it, then make sure you have a terminal window open that is ssh-ed into the robot arm. <br>
+First, turn on the switch for arduino power and reset the e-stop switch, if necessary. <br>
+then, in that window, type the following: ./robot.sh <br>
+after a few seconds, the letter "A" should appear. <br>
+This is your acknowledgement that the arm is connected.<br> 
+You can now turn on the motor power switch. <br>
+<br>
+Run the program you just typed in your python IDE, and the arm should scoot! <br>
+YAY!<br>
+<br>
+Now, to turn it off, flip both the motor power and arduino power switches to off. <br>
+Run the command in the terminal that is sshed into the robot arm (where the "A" appeared at the start): sudo shutdown now <br>
+Wait 15 seconds, and flip the main power and RPi power switches to off. <br>
+Then, shut down your pi and give the robot arm a high-five! <br>
 
 </p>
 
-
+</div>
 
 
 
       
-      </center>
+ 
 
 
 
