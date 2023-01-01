@@ -27,7 +27,7 @@ while 1:
 
 # more API explanation
 Robot() creates a new robot object. Upon calling, it will connect to the robot arm via ethernet, so please don't try to set up the robot arm object before connecting the two pis and verifying that the network connected with ifconfig. (type ifconfig in the terminal, the eth0 interface should be connected).
-This object will return its joint data array when the __str__ function is called, throwing an error due to integer arrays not being strings :/  
+This object will return its joint data array when the __str__ function is called, throwing an error due to integer arrays not being strings - so maybe don't do that :/   
 
 interpolate(newData,steps,time) is a function that causes the robot to interpolate to a new position. Pass an array for newData, which should have 7 elements in this order: [base,shoulder,elbow,wristPitch,wristRoll,Hand1,Hand2]. Steps is simply the number of steps you wish to move through between the current position and newData. time is how long to spend interpolating. The robot can handle 5 steps per second, so for a maximally smooth interpolation, multiply time by 5 and add 5 for buffer if time is greater than 3. 
 
