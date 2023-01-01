@@ -25,7 +25,7 @@ while 1:
     time.sleep(2)
 
 
-# more API explanation
+# more API explanation for the curious
 Robot() creates a new robot object. Upon calling, it will connect to the robot arm via ethernet, so please don't try to set up the robot arm object before connecting the two pis and verifying that the network connected with ifconfig. (type ifconfig in the terminal, the eth0 interface should be connected).
 This object will return its joint data array when the __str__ function is called, throwing an error due to integer arrays not being strings - so maybe don't do that :/   
 
