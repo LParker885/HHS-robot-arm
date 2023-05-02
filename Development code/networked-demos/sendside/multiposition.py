@@ -4,9 +4,12 @@ import math
 import time
 ip = "169.254.126.87"
 
-#positions
+# block positions for this example - put more into the array if you want!
 #     1                  2
 #     3                  4
+#see the website for a video
+
+
 #                    over, open               down, open         down, closed           over, closed
 posarray = [
                 [[90,90,90,90,90,110], [90,90,90,90,90,110], [90,90,90,90,90,110], [90,90,90,90,90,110]]  # 1
@@ -24,7 +27,8 @@ jointdata = [90,90,90,90,90,110]
 def sayNet():
     for i in range(0,6):
         network.say("{0},{1}".format(i,jointdata[i]))
-        print("{0},{1}".format(i,jointdata[i]))
+        #print("{0},{1}".format(i,jointdata[i]))
+    print (jointdata)
 
 def interpolate(newData,steps,timego):
     increment = [0,0,0,0,0,0]
@@ -32,16 +36,18 @@ def interpolate(newData,steps,timego):
     for pos in range(0,6):
         temp = newData[pos]-jointdata[pos]
         increment[pos] = round(temp/steps,2)
-    print("increment",increment)
+    #print("increment",increment)
     for t in range(0,steps):
         for pos in range(0,6):
             jointdata[pos] = round(jointdata[pos] + increment[pos],2)
         sayNet()
 
+
         time.sleep(timego/steps)
     for pos in range(0,6):
         jointdata[pos] = newData[pos]
     sayNet()
+    
 
 def pickupnputdown(frompos, topos):
     interpolate(posarray[frompos][0],20,3)
